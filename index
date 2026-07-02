@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Universidad LinkSolution</title>
+
+<style>
+
+body{
+font-family:Arial, Helvetica, sans-serif;
+margin:0;
+background:#f2f5fa;
+}
+
+.logo{
+position:absolute;
+top:30px;
+right:40px;
+width:150px;
+}
+
+/* HEADER */
+
+.header{
+background:linear-gradient(135deg,#1f4f82,#2f6eb3);
+color:white;
+padding:60px 20px;
+text-align:center;
+position:relative;
+}
+
+.header h1{
+margin:0;
+font-size:40px;
+}
+
+.header p{
+margin-top:10px;
+font-size:18px;
+opacity:0.9;
+}
+
+/* CONTENEDOR */
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:40px 20px;
+}
+
+/* GRID CURSOS */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:30px;
+}
+
+/* TARJETAS */
+
+.card{
+background:white;
+border-radius:12px;
+padding:30px;
+box-shadow:0 8px 20px rgba(0,0,0,0.1);
+transition:0.2s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+}
+
+.icon{
+font-size:42px;
+}
+
+.card h2{
+margin-top:10px;
+color:#1f4f82;
+}
+
+.meta{
+margin-top:10px;
+color:#555;
+font-size:14px;
+}
+
+/* BOTON */
+
+.button{
+display:inline-block;
+margin-top:18px;
+padding:12px 20px;
+background:#1f4f82;
+color:white;
+text-decoration:none;
+border-radius:6px;
+font-weight:bold;
+}
+
+.button:hover{
+background:#16365a;
+}
+
+/* CONTACTO */
+
+.contact-section{
+text-align:center;
+padding:20px 20px 40px;
+}
+
+.contact-button{
+display:inline-block;
+padding:14px 28px;
+background:#2f6eb3;
+color:white;
+text-decoration:none;
+border-radius:6px;
+font-weight:bold;
+font-size:16px;
+}
+
+.contact-button:hover{
+background:#1f4f82;
+}
+
+/* FOOTER */
+
+footer{
+text-align:center;
+padding:25px;
+color:#777;
+font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<img src="logo.png" alt="Logo LinkSolution" class="logo">
+<h1>Universidad LinkSolution</h1>
+<p>Cursos de formación</p>
+</div>
+
+<div class="container">
+
+<div class="grid">
+
+<div class="card">
+<div class="icon">🏆</div>
+<h2>Líderes de hoy</h2>
+<p>Este curso desarrollará algunos conceptos importantes para un líder.</p>
+
+<div class="meta">
+3 módulos • Duración estimada: 3 hs
+</div>
+
+<a class="button" href="CursoLiderazgo">
+Ingresar al curso
+</a>
+</div>
+
+<div class="card">
+<div class="icon">📞</div>
+<h2>Comunicación</h2>
+<p>La comunicación es una herramienta fundamental en nuestra vida diaria</p>
+
+<div class="meta">
+4 módulos • Duración estimada: 3 hs
+</div>
+
+<a class="button" href="Curso_comunicacion">
+Ingresar al curso
+</a>
+</div>
+
+<div class="card">
+<div class="icon">🤝</div>
+<h2>Trabajo en equipo</h2>
+<p> Qué tipo de comportamientos surgen cuando trabajamos juntos</p>
+
+<div class="meta">
+5 módulos • Duración estimada: 3 hs
+</div>
+
+<a class="button" href="Trabajo_en_equipo">
+Ingresar al curso
+</a>
+</div>
+
+<div class="card">
+<div class="icon">🤝</div>
+<h2>Negociación</h2>
+<p>En este curso conocerás distintas formas y técnicas de negociación.</p>
+
+<div class="meta">
+4 módulos • Duración estimada: 4 hs
+</div>
+
+<a class="button" href="Negociacion">
+Ingresar al curso
+</a>
+</div>
+
+<div class="card">
+<div class="icon">❤</div>
+<h2>Empatía en el trabajo</h2>
+<p>En este curso trabajaremos herramientas clave para comprender y desarrollar la empatía, especialmente en contextos laborales.</p>
+
+<div class="meta">
+5 módulos • Duración estimada: 3 hs
+</div>
+
+<a class="button" href="Empatia">
+Ingresar al curso
+</a>
+</div>
+
+<div class="card">
+<div class="icon">🏆</div>
+<h2>IA: Impacto y aplicación en la vida laboral</h2>
+<p> Este curso está diseñado para ofrecer una introducción clara, accesible y actualizada al mundo de la IA.</p>
+
+<div class="meta">
+5 módulos • Duración estimada: 2 hs
+</div>
+
+<a class="button" href="IA_Impacto">
+Ingresar al curso
+</a>
+</div>  
+
+</div>
+
+</div>
+
+<!-- PROXIMAMENTE -->
+
+<div class="container">
+
+<h2 style="color:#1f4f82; text-align:center; margin-bottom:30px;">
+Próximamente...
+</h2>
+
+<div class="grid">
+
+<div class="card" style="text-align:center;">
+<h2>🚀 Excel básico</h2>
+</div>
+
+<div class="card" style="text-align:center;">
+<h2>📚 Redacción y ortografía</h2>
+</div>
+
+<div class="card" style="text-align:center;">
+<h2>⭐ Pensamiento crítico</h2>
+</div>
+
+</div>
+
+</div>  
+
+<!-- CONTACTO -->
+
+<div class="contact-section">
+<a class="contact-button" href="mailto:capacitacion@linksolution.com.ar?subject=Consulta%20o%20inconveniente%20-%20Campus%20de%20capacitación">
+✉ Consultas o inconvenientes
+</a>
+</div>
+
+<footer>
+Campus de capacitación interna
+</footer>
+
+</body>
+</html>
