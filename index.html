@@ -2,135 +2,248 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Universidad LinkSolution</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 
 <style>
 
-body{
-font-family:Arial, Helvetica, sans-serif;
-margin:0;
-background:#f2f5fa;
+:root{
+  --ink:#141F33;
+  --ink-soft:#243350;
+  --paper:#F0F3F7;
+  --paper-card:#FFFFFF;
+  --brass:#B8862B;
+  --brass-soft:#E7C888;
+  --slate:#45607F;
+  --line:#D9DFE8;
+  --text:#1D2634;
+  --text-soft:#5B6579;
+  --radius:14px;
 }
 
-.logo{
-position:absolute;
-top:30px;
-right:40px;
-width:150px;
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--text);
+  font-family:'IBM Plex Sans', system-ui, sans-serif;
+  font-size:16px;
+  line-height:1.6;
+}
+
+h1,h2{
+  font-family:'Fraunces', Georgia, serif;
+  color:var(--ink);
+  line-height:1.15;
+  margin:0;
+  font-weight:600;
+}
+
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--brass-soft);
+  font-weight:500;
+  display:block;
+  margin-bottom:.7em;
 }
 
 /* HEADER */
-
 .header{
-background:linear-gradient(135deg,#1f4f82,#2f6eb3);
-color:white;
-padding:60px 20px;
-text-align:center;
-position:relative;
+  background:radial-gradient(120% 160% at 12% -20%, #24365A 0%, var(--ink) 55%, #0F1728 100%);
+  color:#fff;
+  padding:70px 24px 64px;
+  text-align:center;
+  position:relative;
+}
+
+.logo{
+  position:absolute;
+  top:28px;
+  right:36px;
+  width:130px;
+  filter:brightness(0) invert(1);
+  opacity:.9;
 }
 
 .header h1{
-margin:0;
-font-size:40px;
+  font-size:clamp(32px,5vw,48px);
+  color:#fff;
 }
 
 .header p{
-margin-top:10px;
-font-size:18px;
-opacity:0.9;
+  margin-top:.6em;
+  font-size:18px;
+  color:#C9CFDC;
 }
 
 /* CONTENEDOR */
-
 .container{
-max-width:1200px;
-margin:auto;
-padding:40px 20px;
+  max-width:1180px;
+  margin:auto;
+  padding:56px 24px;
 }
 
-/* GRID CURSOS */
+.section-title{
+  text-align:center;
+  margin-bottom:36px;
+}
+.section-title h2{font-size:26px;}
+.section-title .eyebrow{color:var(--brass); text-align:center;}
 
+/* GRID CURSOS */
 .grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:30px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+  gap:24px;
 }
 
 /* TARJETAS */
-
 .card{
-background:white;
-border-radius:12px;
-padding:30px;
-box-shadow:0 8px 20px rgba(0,0,0,0.1);
-transition:0.2s;
+  background:var(--paper-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:28px;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  display:flex;
+  flex-direction:column;
 }
 
 .card:hover{
-transform:translateY(-6px);
+  transform:translateY(-5px);
+  box-shadow:0 16px 32px rgba(20,31,51,.10);
+  border-color:#C7D0DD;
 }
 
 .icon{
-font-size:42px;
+  font-size:34px;
+  width:56px;
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#EFE4CB;
+  border-radius:12px;
+  margin-bottom:16px;
 }
 
 .card h2{
-margin-top:10px;
-color:#1f4f82;
+  font-size:20px;
+  margin-bottom:.4em;
+}
+
+.card p{
+  color:var(--text-soft);
+  font-size:14.5px;
+  margin:0;
+  flex-grow:1;
 }
 
 .meta{
-margin-top:10px;
-color:#555;
-font-size:14px;
+  margin-top:16px;
+  color:var(--text-soft);
+  font-size:13px;
+  font-family:'IBM Plex Mono', monospace;
+  letter-spacing:.02em;
+  border-top:1px solid var(--line);
+  padding-top:14px;
 }
 
 /* BOTON */
-
 .button{
-display:inline-block;
-margin-top:18px;
-padding:12px 20px;
-background:#1f4f82;
-color:white;
-text-decoration:none;
-border-radius:6px;
-font-weight:bold;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:18px;
+  padding:12px 20px;
+  background:var(--ink);
+  color:#fff;
+  text-decoration:none;
+  border-radius:8px;
+  font-weight:600;
+  font-size:14.5px;
+  letter-spacing:.01em;
+  transition:background .15s;
 }
 
 .button:hover{
-background:#16365a;
+  background:var(--ink-soft);
+}
+
+/* PROXIMAMENTE */
+.upcoming .card{
+  text-align:center;
+  align-items:center;
+  background:transparent;
+  border:1px dashed var(--line);
+  box-shadow:none;
+}
+.upcoming .card:hover{
+  transform:none;
+  box-shadow:none;
+  border-color:var(--brass-soft);
+}
+.upcoming .card h2{
+  font-size:17px;
+  color:var(--text-soft);
+  font-family:'IBM Plex Sans';
+  font-weight:600;
+}
+.upcoming .tag{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--brass);
+  margin-top:6px;
+  display:block;
 }
 
 /* CONTACTO */
-
 .contact-section{
-text-align:center;
-padding:20px 20px 40px;
+  text-align:center;
+  padding:10px 20px 60px;
 }
 
 .contact-button{
-display:inline-block;
-padding:14px 28px;
-background:#2f6eb3;
-color:white;
-text-decoration:none;
-border-radius:6px;
-font-weight:bold;
-font-size:16px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:14px 28px;
+  background:var(--paper-card);
+  color:var(--ink);
+  border:1px solid var(--line);
+  text-decoration:none;
+  border-radius:100px;
+  font-weight:600;
+  font-size:15px;
+  transition:all .15s;
 }
 
 .contact-button:hover{
-background:#1f4f82;
+  background:var(--ink);
+  color:#fff;
+  border-color:var(--ink);
 }
 
 /* FOOTER */
-
 footer{
-text-align:center;
-padding:25px;
-color:#777;
-font-size:14px;
+  text-align:center;
+  padding:28px;
+  color:var(--text-soft);
+  font-size:13px;
+  font-family:'IBM Plex Mono', monospace;
+  letter-spacing:.03em;
+  border-top:1px solid var(--line);
+}
+
+@media (max-width:640px){
+  .logo{position:static; margin:0 auto 20px; display:block; width:100px;}
 }
 
 </style>
@@ -140,6 +253,7 @@ font-size:14px;
 
 <div class="header">
 <img src="logo.png" alt="Logo LinkSolution" class="logo">
+<span class="eyebrow" style="text-align:center;">Campus de capacitación interna</span>
 <h1>Universidad LinkSolution</h1>
 <p>Cursos de formación</p>
 </div>
@@ -179,7 +293,7 @@ Ingresar al curso
 <div class="card">
 <div class="icon">🤝</div>
 <h2>Trabajo en equipo</h2>
-<p> Qué tipo de comportamientos surgen cuando trabajamos juntos</p>
+<p>Qué tipo de comportamientos surgen cuando trabajamos juntos</p>
 
 <div class="meta">
 5 módulos • Duración estimada: 3 hs
@@ -221,7 +335,7 @@ Ingresar al curso
 <div class="card">
 <div class="icon">🏆</div>
 <h2>IA: Impacto y aplicación en la vida laboral</h2>
-<p> Este curso está diseñado para ofrecer una introducción clara, accesible y actualizada al mundo de la IA.</p>
+<p>Este curso está diseñado para ofrecer una introducción clara, accesible y actualizada al mundo de la IA.</p>
 
 <div class="meta">
 5 módulos • Duración estimada: 2 hs
@@ -230,7 +344,7 @@ Ingresar al curso
 <a class="button" href="IA_Impacto">
 Ingresar al curso
 </a>
-</div>  
+</div>
 
 </div>
 
@@ -238,29 +352,33 @@ Ingresar al curso
 
 <!-- PROXIMAMENTE -->
 
-<div class="container">
+<div class="container upcoming" style="padding-top:0;">
 
-<h2 style="color:#1f4f82; text-align:center; margin-bottom:30px;">
-Próximamente...
-</h2>
+<div class="section-title">
+<span class="eyebrow">En preparación</span>
+<h2>Próximamente...</h2>
+</div>
 
 <div class="grid">
 
-<div class="card" style="text-align:center;">
+<div class="card">
 <h2>🚀 Excel básico</h2>
+<span class="tag">Próximamente</span>
 </div>
 
-<div class="card" style="text-align:center;">
+<div class="card">
 <h2>📚 Redacción y ortografía</h2>
+<span class="tag">Próximamente</span>
 </div>
 
-<div class="card" style="text-align:center;">
+<div class="card">
 <h2>⭐ Pensamiento crítico</h2>
+<span class="tag">Próximamente</span>
 </div>
 
 </div>
 
-</div>  
+</div>
 
 <!-- CONTACTO -->
 
@@ -271,7 +389,7 @@ Próximamente...
 </div>
 
 <footer>
-Campus de capacitación interna
+CAMPUS DE CAPACITACIÓN INTERNA
 </footer>
 
 </body>
