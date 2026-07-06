@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trabajo en Equipo — Curso interactivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --ink:#141F33;
+  --ink-soft:#243350;
+  --paper:#F0F3F7;
+  --paper-card:#FFFFFF;
+  --brass:#B8862B;
+  --brass-soft:#E7C888;
+  --slate:#45607F;
+  --moss:#3E7A5E;
+  --moss-soft:#DCEEE4;
+  --clay:#B35A46;
+  --clay-soft:#F5DFD8;
+  --line:#D9DFE8;
+  --text:#1D2634;
+  --text-soft:#5B6579;
+  --radius:14px;
+  --maxw:880px;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--paper); color:var(--text);
+  font-family:'IBM Plex Sans', system-ui, sans-serif; font-size:17px; line-height:1.6;
+}
+h1,h2,h3,h4{font-family:'Fraunces', Georgia, serif; color:var(--ink); line-height:1.15; margin:0 0 .5em 0; font-weight:600;}
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--brass); font-weight:500; display:block; margin-bottom:.6em;
+}
+p{margin:0 0 1em 0;}
+ul,ol{margin:0 0 1em 0; padding-left:1.3em;}
+a{color:var(--slate);}
+
+.section{scroll-margin-top:90px; max-width:var(--maxw); margin:0 auto; padding:64px 24px;}
+.section + .section{border-top:1px solid var(--line);}
+.section[data-compass]{padding-top:96px;}
+
+/* ===== BOTON VOLVER A CURSOS ===== */
+.back-home{
+  position:fixed; top:18px; left:18px; z-index:1000; display:inline-flex; align-items:center; gap:6px;
+  font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.03em; text-decoration:none;
+  color:#EFEEE8; background:rgba(20,31,51,.55); backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.18); padding:8px 14px 8px 10px; border-radius:100px;
+  opacity:.75; transition:opacity .15s, background .15s;
+}
+.back-home:hover{opacity:1; background:var(--ink);}
+.back-home svg{width:13px; height:13px; flex-shrink:0;}
+@media (max-width:900px){ .back-home{top:10px; left:10px; font-size:11px; padding:7px 12px 7px 9px;} }
+
+/* ===== HERO ===== */
+.hero{
+  background:radial-gradient(120% 140% at 15% -10%, #24365A 0%, var(--ink) 55%, #0F1728 100%);
+  color:#EFEEE8; padding:80px 24px 70px; position:relative; overflow:hidden;
+}
+.hero-inner{max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:200px 1fr; gap:40px; align-items:center;}
+.hero h1{color:#fff; font-size:clamp(34px,5vw,52px); margin-bottom:.25em;}
+.hero p.lead{color:#C9CFDC; font-size:18px; max-width:52ch;}
+.hero-meta{display:flex; gap:10px; flex-wrap:wrap; margin-top:22px;}
+.chip{
+  font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.04em;
+  border:1px solid rgba(255,255,255,.25); color:#DCE1EA; padding:6px 12px; border-radius:100px;
+}
+
+/* compass (6 puntos) */
+.compass{width:170px; height:170px; margin:0 auto;}
+.compass .dial{fill:none; stroke:rgba(255,255,255,.35); stroke-width:1;}
+.compass .label{font-family:'IBM Plex Mono', monospace; font-size:8.5px; fill:#9AA6BC; letter-spacing:.05em;}
+.compass .label.active{fill:var(--brass-soft); font-weight:700;}
+.compass .needle{transform-origin:85px 85px; transition:transform .7s cubic-bezier(.2,.8,.2,1);}
+.compass .needle-fill{fill:var(--brass);}
+.compass .hub{fill:#0F1728; stroke:var(--brass); stroke-width:2;}
+
+/* ===== LAYOUT WITH NAV ===== */
+.layout{max-width:1180px; margin:0 auto; display:grid; grid-template-columns:220px 1fr; gap:0;}
+.railwrap{position:relative;}
+.rail{position:sticky; top:28px; padding:28px 20px 28px 24px; display:flex; flex-direction:column; gap:4px;}
+.rail .mini-compass{width:64px; height:64px; margin-bottom:16px;}
+.rail a{
+  font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.02em; color:var(--text-soft);
+  text-decoration:none; padding:8px 10px; border-radius:8px; border-left:2px solid transparent; transition:all .15s;
+}
+.rail a:hover{color:var(--ink); background:#E5E9F0;}
+.rail a.active{color:var(--ink); border-left-color:var(--brass); background:#fff; font-weight:600;}
+.content{min-width:0;}
+.content .section{padding-left:24px; padding-right:24px;}
+
+/* ===== CARDS / GRID ===== */
+.card-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:20px 0;}
+.card-grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.card-grid.cols-4{grid-template-columns:repeat(4,1fr);}
+.card{background:var(--paper-card); border:1px solid var(--line); border-radius:var(--radius); padding:20px;}
+.card h4{font-size:16px; margin-bottom:.35em;}
+.card p{font-size:14px; color:var(--text-soft); margin:0;}
+.card .icon{font-size:22px; margin-bottom:8px; display:block;}
+
+/* ===== NOTE BOXES ===== */
+.note{background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:18px 20px; margin:20px 0; font-size:15.5px;}
+.note.accent{background:var(--moss-soft); border-color:#BFDECD; color:#1F4433;}
+.note.warn{background:#FCF3E3; border-color:var(--brass-soft); color:#5A4419;}
+
+/* ===== VIDEO ===== */
+.video-card{background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:20px; margin:20px 0;}
+.video-card .who{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--slate); letter-spacing:.06em; text-transform:uppercase; display:block; margin-bottom:.5em;}
+.video-frame{position:relative; padding-bottom:56.25%; height:0; border-radius:10px; overflow:hidden; margin-top:14px;}
+.video-frame iframe{position:absolute; top:0; left:0; width:100%; height:100%; border:none;}
+
+/* ===== REVEAL (toggle) ===== */
+.flip-list{display:grid; gap:10px; margin:20px 0;}
+.flip-q{
+  width:100%; text-align:left; cursor:pointer;
+  background:var(--paper-card); border:1px solid var(--line); border-radius:10px;
+  padding:14px 18px; font-family:'IBM Plex Sans'; font-size:16px; font-weight:600;
+  color:var(--ink); display:flex; justify-content:space-between; align-items:center;
+}
+.flip-q .chev{transition:transform .2s; color:var(--brass); font-family:'IBM Plex Mono', monospace;}
+.flip-item.open .flip-q .chev{transform:rotate(45deg);}
+.flip-a{max-height:0; overflow:hidden; transition:max-height .25s ease; background:#fff; border:1px solid var(--line); border-top:none; border-radius:0 0 10px 10px; margin-top:-10px;}
+.flip-a p{padding:16px 18px 16px; margin:0; color:var(--text-soft); font-size:15px;}
+.flip-item.open .flip-a{max-height:220px;}
+.flip-item.open .flip-q{border-radius:10px 10px 0 0;}
+
+/* ===== NUMBERED ACCORDION ===== */
+.acc-list{display:grid; gap:10px; margin:20px 0;}
+.acc-item{background:var(--paper-card); border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+.acc-q{
+  width:100%; text-align:left; cursor:pointer; background:none; border:none;
+  padding:14px 18px; font-family:'IBM Plex Sans'; font-size:16px; font-weight:600;
+  color:var(--ink); display:flex; align-items:center; gap:12px;
+}
+.acc-q .n{
+  font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--brass);
+  width:24px; height:24px; border-radius:50%; background:#F3E7CB;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.acc-q .chev{margin-left:auto; color:var(--brass); transition:transform .2s;}
+.acc-item.open .acc-q .chev{transform:rotate(45deg);}
+.acc-a{max-height:0; overflow:hidden; transition:max-height .25s ease;}
+.acc-a p{padding:0 18px 16px 54px; margin:0; color:var(--text-soft); font-size:15px;}
+.acc-item.open .acc-a{max-height:200px;}
+
+/* ===== COMPARISON TABLE ===== */
+.compare{display:grid; gap:12px; margin:20px 0;}
+.compare-row{background:#fff; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;}
+.compare-row .dim{
+  font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.05em; text-transform:uppercase;
+  color:var(--brass); padding:10px 18px 0;
+}
+.compare-cols{display:grid; grid-template-columns:1fr 1fr;}
+.compare-cols > div{padding:10px 18px 16px; font-size:14px; color:var(--text-soft);}
+.compare-cols .g{border-right:1px solid var(--line);}
+.compare-cols .g::before{content:"GRUPO"; display:block; font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--slate); margin-bottom:4px; letter-spacing:.05em;}
+.compare-cols .e::before{content:"EQUIPO"; display:block; font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--moss); margin-bottom:4px; letter-spacing:.05em;}
+
+/* ===== ROLES ===== */
+.role-group{margin:24px 0;}
+.role-group h3{font-size:18px; color:var(--slate);}
+.role-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+.role-card{background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:18px;}
+.role-card .icon{font-size:26px; margin-bottom:6px; display:block;}
+.role-card h4{font-size:15.5px; margin-bottom:.3em;}
+.role-card p{font-size:13.5px; color:var(--text-soft); margin:0;}
+
+/* ===== ACTIVITY (fill / match) ===== */
+.activity{background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:24px 26px; margin:24px 0;}
+.activity .prompt{font-weight:600; margin-bottom:16px;}
+.fill-text{font-size:16px; line-height:2.2;}
+.fill-text select{
+  font-family:'IBM Plex Mono', monospace; font-size:13.5px; color:var(--ink);
+  border:1px solid var(--line); border-radius:6px; padding:4px 8px; background:var(--paper); margin:0 3px;
+}
+.fill-text select.correct{border-color:var(--moss); background:var(--moss-soft);}
+.fill-text select.incorrect{border-color:var(--clay); background:var(--clay-soft);}
+
+.match-row{display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:center; padding:10px 0; border-bottom:1px solid var(--line);}
+.match-row:last-of-type{border-bottom:none;}
+.match-row .item{font-weight:600; color:var(--ink); font-size:14.5px;}
+.match-row select{width:100%; padding:9px 10px; border-radius:8px; border:1px solid var(--line); font-family:'IBM Plex Sans'; font-size:13.5px; color:var(--text); background:var(--paper);}
+.match-row.correct select{border-color:var(--moss); background:var(--moss-soft);}
+.match-row.incorrect select{border-color:var(--clay); background:var(--clay-soft);}
+
+.guess-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:20px 0;}
+.guess-card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px; cursor:pointer;}
+.guess-card p.clue{font-size:13.5px; color:var(--text-soft); margin:0 0 8px;}
+.guess-card .answer{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--brass); font-weight:700; display:none;}
+.guess-card.revealed .answer{display:block;}
+.guess-card .toggle-label{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--slate); letter-spacing:.03em;}
+
+/* ===== MCQ QUIZ ===== */
+.quiz{background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:26px 26px 22px; margin:24px 0;}
+.quiz-q{margin-bottom:20px; padding-bottom:18px; border-bottom:1px solid var(--line);}
+.quiz-q:last-of-type{border-bottom:none; margin-bottom:8px;}
+.quiz-q .qnum{font-family:'IBM Plex Mono', monospace; color:var(--brass); font-size:13px;}
+.quiz-q p.qtext{font-weight:600; margin:.3em 0 .7em; color:var(--ink);}
+.opt{display:flex; gap:10px; align-items:flex-start; padding:6px 0; font-size:15px; cursor:pointer;}
+.opt input{margin-top:4px;}
+.opt span{color:var(--text-soft);}
+.opt.correct span{color:var(--moss); font-weight:600;}
+.opt.incorrect span{color:var(--clay); font-weight:600;}
+
+.btn{
+  font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:.04em; text-transform:uppercase;
+  background:var(--ink); color:#fff; border:none; border-radius:8px; padding:12px 22px; cursor:pointer;
+  transition:background .15s; margin-top:16px;
+}
+.btn:hover{background:var(--ink-soft);}
+.feedback{margin-top:14px; font-size:14.5px; font-weight:600; display:none;}
+.feedback.show{display:block;}
+.feedback.good{color:var(--moss);}
+.feedback.bad{color:var(--clay);}
+
+/* ===== EVAL FINAL ===== */
+.eval-section{background:var(--ink); color:#EFEEE8; margin-top:0;}
+.eval-section .section{max-width:var(--maxw); padding-top:70px; padding-bottom:70px;}
+.eval-section h2{color:#fff;}
+.eval-section .eyebrow{color:var(--brass-soft);}
+.eval-section p.lead{color:#C9CFDC;}
+.form-frame{margin-top:26px; background:#fff; border-radius:var(--radius); overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,.35);}
+.form-frame iframe{width:100%; min-height:900px; border:none; display:block;}
+
+footer{text-align:center; padding:30px 20px; color:var(--text-soft); font-size:13.5px; font-family:'IBM Plex Mono', monospace;}
+footer .license{display:block; margin-top:6px; font-size:11.5px; opacity:.8;}
+
+@media (max-width:900px){
+  .hero-inner{grid-template-columns:1fr; text-align:center;}
+  .compass{margin:0 auto;}
+  .layout{grid-template-columns:1fr;}
+  .rail{position:sticky; top:0; flex-direction:row; overflow-x:auto; gap:4px; background:var(--paper); border-bottom:1px solid var(--line); padding:12px 16px; z-index:10;}
+  .rail .mini-compass{display:none;}
+  .rail a{white-space:nowrap;}
+  .card-grid, .card-grid.cols-3, .card-grid.cols-4, .role-grid, .guess-grid{grid-template-columns:1fr;}
+  .match-row{grid-template-columns:1fr;}
+  .compare-cols{grid-template-columns:1fr;}
+  .compare-cols .g{border-right:none; border-bottom:1px solid var(--line);}
+}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} .compass .needle, .flip-a, .acc-a{transition:none;} }
+
+</style>
+</head>
+<body>
+
+<a class="back-home" href="https://capalink.github.io/Cursos-LinkSolution/">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+  Cursos
+</a>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <svg class="compass" viewBox="0 0 170 170" aria-hidden="true">
+      <circle class="dial" cx="85" cy="85" r="70"/>
+      <circle class="dial" cx="85" cy="85" r="55"/>
+      <text class="label" id="lbl-mod1" x="85" y="18" text-anchor="middle">GRUPO/EQUIPO</text>
+      <text class="label" id="lbl-mod2" x="146" y="50" text-anchor="start">CARACT.</text>
+      <text class="label" id="lbl-mod3" x="146" y="122" text-anchor="start">ROLES</text>
+      <text class="label" id="lbl-mod4" x="85" y="155" text-anchor="middle">ALTO REND.</text>
+      <text class="label" id="lbl-mod5" x="24" y="122" text-anchor="end">PROBLEMAS</text>
+      <text class="label" id="lbl-eval" x="24" y="50" text-anchor="end">EVAL.</text>
+      <g class="needle" id="needle">
+        <polygon class="needle-fill" points="85,25 91,85 85,80 79,85"/>
+        <polygon points="85,145 91,85 85,90 79,85" fill="#5B6579"/>
+      </g>
+      <circle class="hub" cx="85" cy="85" r="6"/>
+    </svg>
+    <div>
+      <span class="eyebrow">Campus de capacitación · Habilidades blandas</span>
+      <h1>Trabajo en Equipo</h1>
+      <p class="lead">En este módulo vamos a ver qué tipo de comportamientos surgen cuando trabajamos juntos, y vamos a resaltar cómo trabajar en equipo puede traer beneficios tanto en el trabajo como en nuestra vida personal.</p>
+      <div class="hero-meta">
+        <span class="chip">5 módulos</span>
+        <span class="chip">Autoevaluaciones interactivas</span>
+        <span class="chip">Evaluación final</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <div class="railwrap">
+    <nav class="rail" id="rail">
+      <svg class="mini-compass" viewBox="0 0 170 170" aria-hidden="true">
+        <circle class="dial" cx="85" cy="85" r="70" stroke="#B9C2D2"/>
+        <g class="needle" id="needle-mini">
+          <polygon points="85,25 91,85 85,80 79,85" fill="var(--brass)"/>
+          <polygon points="85,145 91,85 85,90 79,85" fill="#B9C2D2"/>
+        </g>
+        <circle cx="85" cy="85" r="6" fill="var(--paper)" stroke="var(--brass)" stroke-width="2"/>
+      </svg>
+      <a href="#indice">Índice</a>
+      <a href="#mod1" data-nav="mod1">1. Grupo vs. Equipo</a>
+      <a href="#mod2" data-nav="mod2">2. Características</a>
+      <a href="#mod3" data-nav="mod3">3. Roles</a>
+      <a href="#mod4" data-nav="mod4">4. Alto rendimiento</a>
+      <a href="#mod5" data-nav="mod5">5. Problemas frecuentes</a>
+      <a href="#evalfinal" data-nav="eval">6. Autoevaluación</a>
+    </nav>
+  </div>
+
+  <div class="content">
+
+    <!-- INDICE -->
+    <section class="section" id="indice">
+      <span class="eyebrow">Objetivos del módulo</span>
+      <h2>Índice</h2>
+      <ul>
+        <li>Comprender la importancia del trabajo en equipo en entornos colaborativos y laborales.</li>
+        <li>Identificar las características de un equipo eficiente y las habilidades necesarias para trabajar de manera colaborativa.</li>
+        <li>Desarrollar habilidades de comunicación y escucha activa para una mejor colaboración dentro del equipo.</li>
+        <li>Mejorar la capacidad para resolver conflictos y manejar situaciones difíciles en el contexto del trabajo en equipo.</li>
+        <li>Aplicar estrategias para fomentar la cohesión del equipo y maximizar su desempeño.</li>
+      </ul>
+      <ol>
+        <li>Diferencia entre un grupo y un equipo</li>
+        <li>Características de un equipo de trabajo</li>
+        <li>Roles dentro de un equipo</li>
+        <li>Equipo de alto rendimiento</li>
+        <li>Problemas frecuentes en el trabajo en equipo</li>
+        <li>Autoevaluación</li>
+      </ol>
+    </section>
+
+    <!-- MOD 1 -->
+    <section class="section" id="mod1" data-compass="mod1">
+      <span class="eyebrow">1 · Conceptos</span>
+      <h2>Diferencia entre un Grupo y un Equipo</h2>
+      <p>Analicemos el siguiente video y reflexionemos sobre lo que ocurre entre sus protagonistas:</p>
+      <div class="video-card">
+        <div class="video-frame">
+          <iframe src="https://www.youtube.com/embed/2vRNAqISTIg" title="Grupo vs. Equipo" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <h3>Analicemos la situación</h3>
+      <div class="flip-list">
+        <div class="flip-item">
+          <button class="flip-q" aria-expanded="false">¿Los integrantes trabajaron en equipo? <span class="chev">+</span></button>
+          <div class="flip-a"><p>No: la consigna era llegar juntos a la meta, pero hubo competencia entre algunos miembros y el objetivo no se logró.</p></div>
+        </div>
+        <div class="flip-item">
+          <button class="flip-q" aria-expanded="false">¿Hubo comunicación entre los integrantes? <span class="chev">+</span></button>
+          <div class="flip-a"><p>No la necesaria: el trabajo en equipo exige una comunicación abierta entre todos sus miembros para poder coordinar las distintas actuaciones individuales, y eso no ocurrió.</p></div>
+        </div>
+        <div class="flip-item">
+          <button class="flip-q" aria-expanded="false">¿Hubo confianza entre los miembros? <span class="chev">+</span></button>
+          <div class="flip-a"><p>No: la falta de confianza los impulsó a priorizar el éxito individual por sobre el del equipo.</p></div>
+        </div>
+      </div>
+
+      <h3>Grupo vs. Equipo</h3>
+      <div class="card-grid">
+        <div class="card"><h4>Grupo</h4><p>Conjunto de individuos interconectados que se reúnen por diversas razones, como compartir intereses, objetivos o actividades comunes. Pueden colaborar, interactuar y comunicarse, pero no siempre con un objetivo compartido.</p></div>
+        <div class="card"><h4>Equipo</h4><p>Grupo de personas que trabajan juntas de manera colaborativa y coordinada para alcanzar un objetivo común, con una estructura organizada y roles específicos, comunicación activa y aprovechamiento de las fortalezas individuales.</p></div>
+      </div>
+
+      <p>Despleguemos las diferencias entre uno y otro:</p>
+      <div class="compare">
+        <div class="compare-row">
+          <div class="dim">Objetivos y metas</div>
+          <div class="compare-cols">
+            <div class="g">Pueden compartir intereses o estar juntos por alguna razón, pero no necesariamente tienen un objetivo común y pueden trabajar de manera individual.</div>
+            <div class="e">Comparten objetivos y metas comunes. Trabajan de manera coordinada y colaborativa para lograr un resultado específico.</div>
+          </div>
+        </div>
+        <div class="compare-row">
+          <div class="dim">Interdependencia</div>
+          <div class="compare-cols">
+            <div class="g">Puede ser baja: los miembros realizan tareas independientes sin influir significativamente en los demás.</div>
+            <div class="e">Es alta: cada miembro tiene un rol específico y las acciones de uno afectan las de los demás.</div>
+          </div>
+        </div>
+        <div class="compare-row">
+          <div class="dim">Comunicación</div>
+          <div class="compare-cols">
+            <div class="g">Puede ser más ocasional y centrada en compartir información básica.</div>
+            <div class="e">Es más intensa y colaborativa: se comunican regularmente para tomar decisiones conjuntas.</div>
+          </div>
+        </div>
+        <div class="compare-row">
+          <div class="dim">Roles y responsabilidades</div>
+          <div class="compare-cols">
+            <div class="g">Pueden no estar tan definidos; puede haber superposiciones o falta de claridad.</div>
+            <div class="e">Están claramente definidos y diseñados para complementar las habilidades de cada miembro.</div>
+          </div>
+        </div>
+        <div class="compare-row">
+          <div class="dim">Resultados</div>
+          <div class="compare-cols">
+            <div class="g">No necesariamente están enfocados en resultados tangibles y medibles.</div>
+            <div class="e">Están orientados a resultados específicos y medibles: el éxito se mide por el logro de los objetivos compartidos.</div>
+          </div>
+        </div>
+        <div class="compare-row">
+          <div class="dim">Coordinación</div>
+          <div class="compare-cols">
+            <div class="g">Puede ser menos crucial, ya que los miembros funcionan más de manera individual.</div>
+            <div class="e">Es esencial para garantizar que todos trabajen juntos de manera armoniosa.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note accent">
+        <strong>Resumiendo:</strong> el trabajo en equipo se distingue por su enfoque colaborativo hacia un objetivo compartido. Los miembros tienen roles definidos y trabajan interdependientemente, combinando sus habilidades para alcanzar metas comunes. Esto fomenta la comunicación abierta, el intercambio de ideas y la resolución conjunta de problemas — y además promueve un sentido de pertenencia, compromiso y motivación compartida.
+      </div>
+
+      <h3>Actividad integradora</h3>
+      <div class="activity" id="act-fill1">
+        <p class="prompt">Completá cada frase eligiendo "grupo" o "equipo" según corresponda:</p>
+        <p class="fill-text">
+          Los miembros de un <select data-correct="grupo"><option value="">…</option></select> pueden compartir intereses o estar juntos por alguna razón, pero no necesariamente tienen un objetivo común y pueden trabajar de manera individual.<br>
+          La interdependencia es alta en un <select data-correct="equipo"><option value="">…</option></select>. Cada miembro tiene un rol específico y las acciones de un miembro afectan las acciones de los demás.<br>
+          La comunicación en un <select data-correct="grupo"><option value="">…</option></select> puede ser más ocasional y centrada en compartir información básica.<br>
+          La coordinación en un <select data-correct="grupo"><option value="">…</option></select> puede ser menos crucial, ya que los miembros pueden funcionar más de manera individual.<br>
+          La coordinación en un <select data-correct="equipo"><option value="">…</option></select> es esencial para garantizar que todos los miembros estén trabajando juntos de manera armoniosa.
+        </p>
+        <button type="button" class="btn btn-check-fill" data-target="act-fill1">Comprobar</button>
+        <p class="feedback"></p>
+      </div>
+    </section>
+
+    <!-- MOD 2 -->
+    <section class="section" id="mod2" data-compass="mod2">
+      <span class="eyebrow">2 · Fundamentos</span>
+      <h2>Características de un equipo de trabajo</h2>
+      <div class="card-grid">
+        <div class="card"><span class="icon">🎯</span><h4>Objetivo común</h4><p>Los miembros comparten un objetivo o meta específica que están comprometidos a alcanzar en conjunto.</p></div>
+        <div class="card"><span class="icon">🧩</span><h4>Roles definidos</h4><p>Cada miembro tiene un rol y responsabilidades claramente definidos que contribuyen al logro del objetivo.</p></div>
+        <div class="card"><span class="icon">💬</span><h4>Comunicación activa</h4><p>Es frecuente y abierta: se comparten ideas, información y feedback de manera regular.</p></div>
+        <div class="card"><span class="icon">🤝</span><h4>Liderazgo compartido</h4><p>Puede haber un líder designado, pero el liderazgo puede compartirse según habilidades y situaciones.</p></div>
+        <div class="card"><span class="icon">📊</span><h4>Rendimiento evaluado</h4><p>El éxito se mide en función del logro de los objetivos y el rendimiento del equipo en conjunto.</p></div>
+        <div class="card"><span class="icon">🎨</span><h4>Diversidad de habilidades</h4><p>Los equipos suelen estar compuestos por miembros con habilidades y conocimientos que se complementan.</p></div>
+        <div class="card"><span class="icon">🔥</span><h4>Motivación colectiva</h4><p>Los miembros se motivan mutuamente para alcanzar el objetivo común y superar desafíos.</p></div>
+        <div class="card"><span class="icon">📚</span><h4>Aprendizaje continuo</h4><p>Se promueve el desarrollo de los miembros mediante la adquisición de nuevas habilidades y experiencias.</p></div>
+        <div class="card"><span class="icon">🔄</span><h4>Flexibilidad y adaptabilidad</h4><p>Los equipos se adaptan a cambios y desafíos de manera más ágil gracias a su estructura colaborativa.</p></div>
+      </div>
+
+      <div class="note accent"><strong>Resumiendo:</strong> en la ejecución de tareas, muchas empresas depositan una mayor confianza en el trabajo en equipo que en el esfuerzo individual. Lograr el éxito en una organización hoy demanda la capacidad de colaborar efectivamente en equipo.</div>
+
+      <h3>Actividad integradora · Uní las frases</h3>
+      <div class="activity" id="act-match1">
+        <p class="prompt">Elegí, para cada frase, cómo continúa:</p>
+        <div class="match-row" data-correct="Se comparten ideas, información y feedback de manera regular.">
+          <span class="item">La comunicación es frecuente y abierta entre los miembros del equipo…</span>
+          <select>
+            <option value="">Elegí una opción…</option>
+            <option>Se comparten ideas, información y feedback de manera regular.</option>
+            <option>de manera más ágil debido a su estructura colaborativa.</option>
+            <option>puede ser compartido según las habilidades y situaciones.</option>
+            <option>y el rendimiento del equipo en conjunto.</option>
+            <option>de cada miembro para contribuir al logro del objetivo del equipo.</option>
+          </select>
+        </div>
+        <div class="match-row" data-correct="de manera más ágil debido a su estructura colaborativa.">
+          <span class="item">Los equipos pueden adaptarse a cambios y desafíos…</span>
+          <select>
+            <option value="">Elegí una opción…</option>
+            <option>Se comparten ideas, información y feedback de manera regular.</option>
+            <option>de manera más ágil debido a su estructura colaborativa.</option>
+            <option>puede ser compartido según las habilidades y situaciones.</option>
+            <option>y el rendimiento del equipo en conjunto.</option>
+            <option>de cada miembro para contribuir al logro del objetivo del equipo.</option>
+          </select>
+        </div>
+        <div class="match-row" data-correct="puede ser compartido según las habilidades y situaciones.">
+          <span class="item">El liderazgo…</span>
+          <select>
+            <option value="">Elegí una opción…</option>
+            <option>Se comparten ideas, información y feedback de manera regular.</option>
+            <option>de manera más ágil debido a su estructura colaborativa.</option>
+            <option>puede ser compartido según las habilidades y situaciones.</option>
+            <option>y el rendimiento del equipo en conjunto.</option>
+            <option>de cada miembro para contribuir al logro del objetivo del equipo.</option>
+          </select>
+        </div>
+        <div class="match-row" data-correct="y el rendimiento del equipo en conjunto.">
+          <span class="item">El éxito del equipo se mide en función del logro de los objetivos establecidos…</span>
+          <select>
+            <option value="">Elegí una opción…</option>
+            <option>Se comparten ideas, información y feedback de manera regular.</option>
+            <option>de manera más ágil debido a su estructura colaborativa.</option>
+            <option>puede ser compartido según las habilidades y situaciones.</option>
+            <option>y el rendimiento del equipo en conjunto.</option>
+            <option>de cada miembro para contribuir al logro del objetivo del equipo.</option>
+          </select>
+        </div>
+        <div class="match-row" data-correct="de cada miembro para contribuir al logro del objetivo del equipo.">
+          <span class="item">Roles definidos…</span>
+          <select>
+            <option value="">Elegí una opción…</option>
+            <option>Se comparten ideas, información y feedback de manera regular.</option>
+            <option>de manera más ágil debido a su estructura colaborativa.</option>
+            <option>puede ser compartido según las habilidades y situaciones.</option>
+            <option>y el rendimiento del equipo en conjunto.</option>
+            <option>de cada miembro para contribuir al logro del objetivo del equipo.</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-check-match" data-target="act-match1">Corregir</button>
+        <p class="feedback"></p>
+      </div>
+    </section>
+
+    <!-- MOD 3 -->
+    <section class="section" id="mod3" data-compass="mod3">
+      <span class="eyebrow">3 · Modelo de Belbin</span>
+      <h2>Roles dentro de un equipo</h2>
+      <p>Meredith Belbin desarrolló un enfoque con nueve roles específicos para lograr el éxito en un equipo, a partir de examinar cómo las contribuciones individuales se traducen en el rendimiento colectivo de equipos exitosos.</p>
+
+      <div class="role-group">
+        <h3>Roles de acción</h3>
+        <div class="role-grid">
+          <div class="role-card"><span class="icon">🚀</span><h4>Impulsor</h4><p>Persona de acción que se motiva sola y motiva a otros. Líder natural: ante una crisis, encuentra rápidamente una solución.</p></div>
+          <div class="role-card"><span class="icon">⚙️</span><h4>Implementador</h4><p>Práctico y disciplinado, excelente para llevar las ideas a buen puerto. Es la columna vertebral del equipo.</p></div>
+          <div class="role-card"><span class="icon">✅</span><h4>Finalizador</h4><p>Dedicado, busca la perfección en los detalles. Puede ser introvertido, pero empuja al equipo a producir trabajo de alta calidad.</p></div>
+        </div>
+      </div>
+
+      <div class="role-group">
+        <h3>Roles mentales</h3>
+        <div class="role-grid">
+          <div class="role-card"><span class="icon">🧠</span><h4>Cerebro</h4><p>Innovador y creativo, ayuda a equilibrar el equipo. Prefiere las lluvias de ideas y afianzar sus ideas antes de compartirlas.</p></div>
+          <div class="role-card"><span class="icon">🔍</span><h4>Mentor / evaluador</h4><p>Pensador racional que deja las emociones de lado. Evalúa qué ideas son útiles y viables, y toma las medidas para avanzar.</p></div>
+          <div class="role-card"><span class="icon">📖</span><h4>Especialista</h4><p>Conoce en profundidad su campo y prefiere contribuir en un área específica. Trabaja mejor en soledad que en grupo.</p></div>
+        </div>
+      </div>
+
+      <div class="role-group">
+        <h3>Roles sociales</h3>
+        <div class="role-grid">
+          <div class="role-card"><span class="icon">🕸️</span><h4>Coordinador</h4><p>Excelentes habilidades comunicacionales. Promueve la colaboración y motiva al equipo; los demás confían en sus decisiones.</p></div>
+          <div class="role-card"><span class="icon">👥</span><h4>Cohesionador</h4><p>Se adapta fácilmente a los cambios y sabe armonizar ante un conflicto. Es el primero en ofrecer ayuda cuando alguien lo necesita.</p></div>
+          <div class="role-card"><span class="icon">🕵️</span><h4>Investigador de recursos</h4><p>Habilidades sociales y actitud positiva: explora oportunidades nuevas y genera relaciones y negocios.</p></div>
+        </div>
+      </div>
+
+      <div class="note accent"><strong>Resumiendo:</strong> todos los roles son valiosos — ninguno es más importante que otro. La mayoría de las personas tiene dos o tres roles preferidos que combina según las necesidades. Comprender nuestro rol nos ayuda a ser más efectivos en el rendimiento del equipo.</div>
+
+      <h3>Actividad integradora · Adiviná el rol</h3>
+      <p>Tocá cada tarjeta para descubrir a qué rol corresponde la pista:</p>
+      <div class="guess-grid">
+        <div class="guess-card"><p class="clue">1. Integrante del equipo con excelentes habilidades comunicacionales.</p><span class="toggle-label">Ver respuesta</span><div class="answer">Coordinador</div></div>
+        <div class="guess-card"><p class="clue">2. Conoce en profundidad su campo de acción y prefiere contribuir en un área de especialización específica.</p><span class="toggle-label">Ver respuesta</span><div class="answer">Especialista</div></div>
+        <div class="guess-card"><p class="clue">3. Prefiere trabajar con lluvias de ideas y afianzar sus propias ideas antes de compartirlas con el resto del equipo.</p><span class="toggle-label">Ver respuesta</span><div class="answer">Cerebro</div></div>
+        <div class="guess-card"><p class="clue">4. Es práctico y excelente para llevar las ideas a buen puerto; disciplinado.</p><span class="toggle-label">Ver respuesta</span><div class="answer">Implementador</div></div>
+        <div class="guess-card"><p class="clue">5. Trabaja intensamente para descubrir pequeños detalles y busca la perfección.</p><span class="toggle-label">Ver respuesta</span><div class="answer">Finalizador</div></div>
+        <div class="guess-card"><p class="clue">6. Es el miembro del equipo que hace que el grupo avance.</p><span class="toggle-label">Ver respuesta</span><div class="answer">Impulsor</div></div>
+      </div>
+    </section>
+
+    <!-- MOD 4 -->
+    <section class="section" id="mod4" data-compass="mod4">
+      <span class="eyebrow">4 · Excelencia</span>
+      <h2>Equipo de alto rendimiento</h2>
+      <p>Es un grupo de colaboradores que busca incansablemente la excelencia en su desempeño, a partir de:</p>
+      <div class="card-grid cols-4">
+        <div class="card"><p style="margin:0; font-size:14px;">Objetivos claros compartidos</p></div>
+        <div class="card"><p style="margin:0; font-size:14px;">Liderazgo efectivo</p></div>
+        <div class="card"><p style="margin:0; font-size:14px;">Espíritu colaborativo</p></div>
+        <div class="card"><p style="margin:0; font-size:14px;">Comunicación efectiva</p></div>
+        <div class="card"><p style="margin:0; font-size:14px;">Expectativas claras</p></div>
+        <div class="card"><p style="margin:0; font-size:14px;">Conocimiento de las reglas del grupo</p></div>
+        <div class="card"><p style="margin:0; font-size:14px;">Fuerte responsabilidad</p></div>
+        <div class="card"><p style="margin:0; font-size:14px;">Confianza</p></div>
+      </div>
+
+      <h3>¿Cómo se forman?</h3>
+      <ul>
+        <li>Buscan profesionalidad, especialización y capacidad de trabajo en equipo.</li>
+        <li>Escogen sus miembros entre quienes saben superar sus debilidades y potenciar sus fortalezas.</li>
+        <li>No tienen que ser perfectos, pero sí tener capacidad de adaptación.</li>
+        <li>Dejan claras sus expectativas y los objetivos a lograr, y procuran que se entiendan las recompensas.</li>
+        <li>Valoran la especialización de los integrantes.</li>
+        <li>Se preparan para dar feedback continuado y supervisar los avances.</li>
+      </ul>
+
+      <h3>¿Por qué son útiles?</h3>
+      <p>Un equipo de alto rendimiento logra entregas tempranas, en el momento preciso o antes, siempre con ideas innovadoras. Piensa constantemente en cómo mejorar su forma de trabajar: si algo lo limita, va a querer removerlo, porque disfruta el éxito y ser funcional.</p>
+
+      <div class="activity" id="act-fill2">
+        <p class="prompt">Completá el párrafo eligiendo la palabra correcta en cada espacio:</p>
+        <p class="fill-text">
+          Los equipos de alto rendimiento escogen sus miembros entre las personas que saben superar sus <select data-correct="debilidades"><option value="">…</option></select> y potenciar sus <select data-correct="fortalezas"><option value="">…</option></select>. Valoran la <select data-correct="especialización"><option value="">…</option></select> de los integrantes del equipo y se preparan para proporcionar <select data-correct="feedback"><option value="">…</option></select> continuado y para supervisar los avances.
+        </p>
+        <button type="button" class="btn btn-check-fill" data-target="act-fill2">Comprobar</button>
+        <p class="feedback"></p>
+      </div>
+    </section>
+
+    <!-- MOD 5 -->
+    <section class="section" id="mod5" data-compass="mod5">
+      <span class="eyebrow">5 · Obstáculos</span>
+      <h2>Problemas frecuentes en el trabajo en equipo</h2>
+      <div class="acc-list">
+        <div class="acc-item"><button class="acc-q"><span class="n">1</span>Comunicación deficiente<span class="chev">+</span></button><div class="acc-a"><p>Falta de comunicación clara y abierta entre los miembros, lo que puede llevar a malentendidos, duplicación de esfuerzos y conflictos.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">2</span>Desacuerdos<span class="chev">+</span></button><div class="acc-a"><p>Diferencias de opiniones, personalidades conflictivas o falta de respeto mutuo generan tensiones que afectan la productividad.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">3</span>Desigualdad en las tareas<span class="chev">+</span></button><div class="acc-a"><p>Si algunas personas asumen una carga de trabajo desproporcionadamente alta o baja, puede generar resentimiento y afectar el rendimiento.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">4</span>Falta de compromiso<span class="chev">+</span></button><div class="acc-a"><p>Cuando los miembros no están comprometidos con los objetivos o carecen de motivación, el progreso puede estancarse.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">5</span>Problemas de organización<span class="chev">+</span></button><div class="acc-a"><p>Falta de claridad en los roles y responsabilidades, plazos poco realistas o una mala gestión de recursos dificultan el progreso.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">6</span>Resistencia al cambio<span class="chev">+</span></button><div class="acc-a"><p>Algunos miembros pueden resistirse a nuevas ideas o enfoques, dificultando la implementación de mejoras.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">7</span>Falta de cohesión y sentido de pertenencia<span class="chev">+</span></button><div class="acc-a"><p>Si los miembros no se sienten conectados o carecen de un propósito compartido, se afecta la moral y la colaboración.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">8</span>Dificultades para tomar decisiones<span class="chev">+</span></button><div class="acc-a"><p>Si el equipo no logra consenso o las decisiones se posponen continuamente, se retrasa el progreso y se genera frustración.</p></div></div>
+      </div>
+
+      <div class="note warn">
+        <strong>¡Pero a no desesperar!</strong> Siempre que aparece un conflicto en un equipo de trabajo, no significa que ese equipo no vaya a poder avanzar o lograr su objetivo. Es necesario identificar el origen del conflicto para poder buscar la solución adecuada.
+      </div>
+
+      <p>Los invitamos a ampliar algunas situaciones conflictivas y posibles soluciones en el siguiente video:</p>
+      <div class="video-card">
+        <div class="video-frame">
+          <iframe src="https://www.youtube.com/embed/hgYL7aWuVwc" title="Resolución de conflictos en equipos de trabajo" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- EVALUACION FINAL -->
+<section class="eval-section" id="evalfinal" data-compass="eval">
+  <div class="section">
+    <span class="eyebrow">6 · Para cerrar el curso</span>
+    <h2>Autoevaluación</h2>
+    <p class="lead">La puntuación no influirá en la calificación final. Respondé las siguientes preguntas para repasar los conceptos del módulo:</p>
+
+    <form class="quiz" id="quiz-final" style="background:#fff; color:var(--text);">
+      <div class="quiz-q" data-correct="1">
+        <span class="qnum">01</span>
+        <p class="qtext">¿Cuál de las siguientes acciones ayuda a promover la colaboración efectiva en un equipo?</p>
+        <label class="opt"><input type="radio" name="mq1" value="0"><span>Mantener la información importante solo para vos mismo</span></label>
+        <label class="opt"><input type="radio" name="mq1" value="1"><span>Comunicar claramente los roles y responsabilidades de cada miembro del equipo</span></label>
+        <label class="opt"><input type="radio" name="mq1" value="2"><span>Ignorar las opiniones y sugerencias de otros miembros del equipo</span></label>
+      </div>
+      <div class="quiz-q" data-correct="1">
+        <span class="qnum">02</span>
+        <p class="qtext">¿Cuál es una forma efectiva de resolver conflictos dentro de un equipo?</p>
+        <label class="opt"><input type="radio" name="mq2" value="0"><span>Evitar el conflicto y esperar que se resuelva solo</span></label>
+        <label class="opt"><input type="radio" name="mq2" value="1"><span>Conversar directamente con la persona involucrada para comprender sus puntos de vista</span></label>
+        <label class="opt"><input type="radio" name="mq2" value="2"><span>Tomar decisiones unilaterales sin consultar al equipo</span></label>
+      </div>
+      <div class="quiz-q" data-correct="2">
+        <span class="qnum">03</span>
+        <p class="qtext">¿Por qué es importante la comunicación efectiva en un equipo?</p>
+        <label class="opt"><input type="radio" name="mq3" value="0"><span>Para mantener el secreto sobre la información importante</span></label>
+        <label class="opt"><input type="radio" name="mq3" value="1"><span>Para maximizar la interacción y buena onda entre los miembros del equipo</span></label>
+        <label class="opt"><input type="radio" name="mq3" value="2"><span>Para garantizar que todos los miembros estén informados y alineados con los objetivos del equipo</span></label>
+      </div>
+      <div class="quiz-q" data-correct="1">
+        <span class="qnum">04</span>
+        <p class="qtext">¿Qué estrategia es más efectiva para gestionar equipos virtuales que trabajan en diferentes zonas horarias?</p>
+        <label class="opt"><input type="radio" name="mq4" value="0"><span>Realizar reuniones sincrónicas frecuentes para asegurar la cohesión del equipo</span></label>
+        <label class="opt"><input type="radio" name="mq4" value="1"><span>Utilizar herramientas de colaboración en línea y fomentar la comunicación asincrónica</span></label>
+        <label class="opt"><input type="radio" name="mq4" value="2"><span>Limitar la interacción entre los miembros del equipo para evitar confusiones</span></label>
+      </div>
+      <div class="quiz-q" data-correct="0">
+        <span class="qnum">05</span>
+        <p class="qtext">¿Qué papel juegan las normas y valores compartidos en el desarrollo de la cultura de equipo?</p>
+        <label class="opt"><input type="radio" name="mq5" value="0"><span>Ayudan a establecer expectativas claras y a fomentar la cohesión del equipo</span></label>
+        <label class="opt"><input type="radio" name="mq5" value="1"><span>No tienen importancia, ya que cada miembro del equipo tiene sus propias normas y valores</span></label>
+        <label class="opt"><input type="radio" name="mq5" value="2"><span>Pueden ser ignoradas si entran en conflicto con los objetivos individuales de los miembros del equipo</span></label>
+      </div>
+      <button type="button" class="btn" id="btn-quiz-final">Corregir</button>
+      <p class="feedback" id="result-quiz-final"></p>
+    </form>
+
+    <p class="lead" style="margin-top:36px;">Para dejar constancia de la finalización del curso, completá también el formulario oficial:</p>
+    <div class="form-frame">
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfsTsundUH51-VHtPIkTM12N7LBN8IjGvXkpGPWdmNGRvdk3w/viewform?embedded=true" title="Trabajo en Equipo - Evaluación Final">Cargando…</iframe>
+    </div>
+  </div>
+</section>
+
+<footer>
+  CAMPUS DE CAPACITACIÓN INTERNA — TRABAJO EN EQUIPO
+  <span class="license">Obra publicada con Licencia Creative Commons Reconocimiento Compartir Igual 4.0</span>
+</footer>
+
+<script>
+// ---- Flip questions ----
+document.querySelectorAll('.flip-q').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const item = btn.closest('.flip-item');
+    item.classList.toggle('open');
+  });
+});
+
+// ---- Accordions ----
+document.querySelectorAll('.acc-q').forEach(btn=>{
+  btn.addEventListener('click', ()=>{ btn.closest('.acc-item').classList.toggle('open'); });
+});
+
+// ---- Guess cards ----
+document.querySelectorAll('.guess-card').forEach(card=>{
+  card.addEventListener('click', ()=>{ card.classList.toggle('revealed'); });
+});
+
+// ---- Fill in the blank (generic) ----
+document.querySelectorAll('.btn-check-fill').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = document.getElementById(btn.dataset.target);
+    const selects = target.querySelectorAll('select');
+    let hits = 0;
+    selects.forEach(sel=>{
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.correct){ sel.classList.add('correct'); hits++; }
+      else if(sel.value !== ''){ sel.classList.add('incorrect'); }
+    });
+    const fb = target.querySelector('.feedback');
+    fb.classList.remove('good','bad');
+    if(hits === selects.length){ fb.textContent = '¡Excelente! Completaste todo correctamente.'; fb.classList.add('good'); }
+    else { fb.textContent = `Completaste ${hits} de ${selects.length} espacios correctamente.`; fb.classList.add('bad'); }
+    fb.classList.add('show');
+  });
+});
+
+// ---- Match activity (generic) ----
+document.querySelectorAll('.btn-check-match').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = document.getElementById(btn.dataset.target);
+    const rows = target.querySelectorAll('.match-row');
+    let hits = 0;
+    rows.forEach(row=>{
+      const sel = row.querySelector('select');
+      const correct = row.dataset.correct;
+      row.classList.remove('correct','incorrect');
+      if(sel.value === correct){ row.classList.add('correct'); hits++; }
+      else if(sel.value !== ''){ row.classList.add('incorrect'); }
+    });
+    const fb = target.querySelector('.feedback');
+    fb.classList.remove('good','bad');
+    if(hits === rows.length){ fb.textContent = '¡Perfecto! Uniste todas las frases correctamente.'; fb.classList.add('good'); }
+    else { fb.textContent = `Acertaste ${hits} de ${rows.length}. Revisá los campos resaltados e intentá de nuevo.`; fb.classList.add('bad'); }
+    fb.classList.add('show');
+  });
+});
+
+// ---- Autoevaluación MCQ ----
+document.getElementById('btn-quiz-final').addEventListener('click', ()=>{
+  const qs = document.querySelectorAll('#quiz-final .quiz-q');
+  let hits = 0, answered = 0;
+  qs.forEach(q=>{
+    const correct = q.dataset.correct;
+    const name = q.querySelector('input').name;
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    q.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','incorrect'));
+    if(checked){
+      answered++;
+      const chosenOpt = checked.closest('.opt');
+      if(checked.value === correct){ chosenOpt.classList.add('correct'); hits++; }
+      else{
+        chosenOpt.classList.add('incorrect');
+        q.querySelector(`.opt input[value="${correct}"]`).closest('.opt').classList.add('correct');
+      }
+    }
+  });
+  const fb = document.getElementById('result-quiz-final');
+  fb.classList.remove('good','bad');
+  if(answered < qs.length){
+    fb.textContent = `Respondiste ${answered} de ${qs.length}. Completá todas las preguntas para corregir.`;
+    fb.classList.add('bad');
+  } else {
+    fb.textContent = `Respondiste correctamente ${hits} de ${qs.length} preguntas.`;
+    fb.classList.add(hits === qs.length ? 'good' : 'bad');
+  }
+  fb.classList.add('show');
+});
+
+// ---- Compass + active nav ----
+const angles = {mod1:0, mod2:60, mod3:120, mod4:180, mod5:240, eval:300};
+const needle = document.getElementById('needle');
+const needleMini = document.getElementById('needle-mini');
+const labelIds = {mod1:'lbl-mod1', mod2:'lbl-mod2', mod3:'lbl-mod3', mod4:'lbl-mod4', mod5:'lbl-mod5', eval:'lbl-eval'};
+const navLinks = document.querySelectorAll('.rail a[data-nav]');
+
+function setActive(key){
+  const angle = angles[key] ?? 0;
+  needle.style.transform = `rotate(${angle}deg)`;
+  needleMini.style.transform = `rotate(${angle}deg)`;
+  Object.values(labelIds).forEach(id=>document.getElementById(id).classList.remove('active'));
+  if(labelIds[key]) document.getElementById(labelIds[key]).classList.add('active');
+  navLinks.forEach(a=>a.classList.toggle('active', a.dataset.nav === key));
+}
+
+const targets = document.querySelectorAll('[data-compass]');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{ if(entry.isIntersecting){ setActive(entry.target.dataset.compass); } });
+}, {rootMargin:'-40% 0px -50% 0px', threshold:0});
+targets.forEach(t=>io.observe(t));
+</script>
+
+</body>
+</html>
