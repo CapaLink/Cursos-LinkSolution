@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Comunicación — Curso interactivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --ink:#141F33;
+  --ink-soft:#243350;
+  --paper:#F0F3F7;
+  --paper-card:#FFFFFF;
+  --brass:#B8862B;
+  --brass-soft:#E7C888;
+  --slate:#45607F;
+  --moss:#3E7A5E;
+  --moss-soft:#DCEEE4;
+  --clay:#B35A46;
+  --clay-soft:#F5DFD8;
+  --line:#D9DFE8;
+  --text:#1D2634;
+  --text-soft:#5B6579;
+  --radius:14px;
+  --maxw:880px;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--text);
+  font-family:'IBM Plex Sans', system-ui, sans-serif;
+  font-size:17px;
+  line-height:1.6;
+}
+
+h1,h2,h3,h4{
+  font-family:'Fraunces', Georgia, serif;
+  color:var(--ink);
+  line-height:1.15;
+  margin:0 0 .5em 0;
+  font-weight:600;
+}
+
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--brass);
+  font-weight:500;
+  display:block;
+  margin-bottom:.6em;
+}
+
+p{margin:0 0 1em 0;}
+ul,ol{margin:0 0 1em 0; padding-left:1.3em;}
+a{color:var(--slate);}
+
+.section{
+  scroll-margin-top:90px;
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:64px 24px;
+}
+.section + .section{border-top:1px solid var(--line);}
+.section[data-compass]{padding-top:96px;}
+
+/* ===== BOTON VOLVER A CURSOS ===== */
+.back-home{
+  position:fixed;
+  top:18px;
+  left:18px;
+  z-index:1000;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  letter-spacing:.03em;
+  text-decoration:none;
+  color:#EFEEE8;
+  background:rgba(20,31,51,.55);
+  backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.18);
+  padding:8px 14px 8px 10px;
+  border-radius:100px;
+  opacity:.75;
+  transition:opacity .15s, background .15s;
+}
+.back-home:hover{opacity:1; background:var(--ink);}
+.back-home svg{width:13px; height:13px; flex-shrink:0;}
+@media (max-width:900px){
+  .back-home{top:10px; left:10px; font-size:11px; padding:7px 12px 7px 9px;}
+}
+
+/* ===== HERO ===== */
+.hero{
+  background:radial-gradient(120% 140% at 15% -10%, #24365A 0%, var(--ink) 55%, #0F1728 100%);
+  color:#EFEEE8;
+  padding:80px 24px 70px;
+  position:relative;
+  overflow:hidden;
+}
+.hero-inner{
+  max-width:var(--maxw);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:40px;
+  align-items:center;
+}
+.hero h1{color:#fff; font-size:clamp(34px,5vw,52px); margin-bottom:.25em;}
+.hero p.lead{color:#C9CFDC; font-size:18px; max-width:52ch;}
+.hero-meta{display:flex; gap:10px; flex-wrap:wrap; margin-top:22px;}
+.chip{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  letter-spacing:.04em;
+  border:1px solid rgba(255,255,255,.25);
+  color:#DCE1EA;
+  padding:6px 12px;
+  border-radius:100px;
+}
+
+/* compass (6 puntos) */
+.compass{width:170px; height:170px; margin:0 auto;}
+.compass .dial{fill:none; stroke:rgba(255,255,255,.35); stroke-width:1;}
+.compass .label{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:8.5px;
+  fill:#9AA6BC;
+  letter-spacing:.05em;
+}
+.compass .label.active{fill:var(--brass-soft); font-weight:700;}
+.compass .needle{transform-origin:85px 85px; transition:transform .7s cubic-bezier(.2,.8,.2,1);}
+.compass .needle-fill{fill:var(--brass);}
+.compass .hub{fill:#0F1728; stroke:var(--brass); stroke-width:2;}
+
+/* ===== LAYOUT WITH NAV ===== */
+.layout{max-width:1180px; margin:0 auto; display:grid; grid-template-columns:220px 1fr; gap:0;}
+.railwrap{position:relative;}
+.rail{position:sticky; top:28px; padding:28px 20px 28px 24px; display:flex; flex-direction:column; gap:4px;}
+.rail .mini-compass{width:64px; height:64px; margin-bottom:16px;}
+.rail a{
+  font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.02em;
+  color:var(--text-soft); text-decoration:none; padding:8px 10px; border-radius:8px;
+  border-left:2px solid transparent; transition:all .15s;
+}
+.rail a:hover{color:var(--ink); background:#E5E9F0;}
+.rail a.active{color:var(--ink); border-left-color:var(--brass); background:#fff; font-weight:600;}
+.content{min-width:0;}
+.content .section{padding-left:24px; padding-right:24px;}
+
+/* ===== CARDS / GRID ===== */
+.card-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:20px 0;}
+.card-grid.cols-4{grid-template-columns:repeat(4,1fr);}
+.card{background:var(--paper-card); border:1px solid var(--line); border-radius:var(--radius); padding:20px;}
+.card h4{font-size:16.5px; margin-bottom:.35em;}
+.card p{font-size:14.5px; color:var(--text-soft); margin:0;}
+.card .icon{font-size:22px; margin-bottom:8px; display:block;}
+.card .num{font-family:'IBM Plex Mono', monospace; color:var(--brass); font-size:13px; display:block; margin-bottom:6px;}
+
+/* ===== NUMBERED ACCORDION ===== */
+.acc-list{display:grid; gap:10px; margin:20px 0;}
+.acc-item{background:var(--paper-card); border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+.acc-q{
+  width:100%; text-align:left; cursor:pointer; background:none; border:none;
+  padding:14px 18px; font-family:'IBM Plex Sans'; font-size:16px; font-weight:600;
+  color:var(--ink); display:flex; align-items:center; gap:12px;
+}
+.acc-q .n{
+  font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--brass);
+  width:24px; height:24px; border-radius:50%; background:#F3E7CB;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.acc-q .chev{margin-left:auto; color:var(--brass); transition:transform .2s;}
+.acc-item.open .acc-q .chev{transform:rotate(45deg);}
+.acc-a{max-height:0; overflow:hidden; transition:max-height .25s ease;}
+.acc-a p{padding:0 18px 16px 54px; margin:0; color:var(--text-soft); font-size:15px;}
+.acc-item.open .acc-a{max-height:200px;}
+
+/* ===== ESTILOS COMUNICACION ===== */
+.style-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:20px 0;}
+.style-card{background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:20px;}
+.style-card .tag{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--brass); letter-spacing:.05em; text-transform:uppercase;}
+.style-card h4{margin:.3em 0 .4em; font-size:18px;}
+.style-card p{font-size:14px; color:var(--text-soft); margin:0;}
+
+/* ===== QUIZ MATCH / FILL ===== */
+.activity{background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:24px 26px; margin:24px 0;}
+.activity .prompt{font-weight:600; margin-bottom:16px;}
+.match-row{
+  display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:center;
+  padding:10px 0; border-bottom:1px solid var(--line);
+}
+.match-row:last-of-type{border-bottom:none;}
+.match-row .item{font-weight:600; color:var(--ink); font-size:15px;}
+.match-row select{
+  width:100%; padding:9px 10px; border-radius:8px; border:1px solid var(--line);
+  font-family:'IBM Plex Sans'; font-size:14px; color:var(--text); background:var(--paper);
+}
+.match-row.correct select{border-color:var(--moss); background:var(--moss-soft);}
+.match-row.incorrect select{border-color:var(--clay); background:var(--clay-soft);}
+
+.fill-text{font-size:16px; line-height:2.1;}
+.fill-text select{
+  font-family:'IBM Plex Mono', monospace; font-size:13.5px; color:var(--ink);
+  border:1px solid var(--line); border-radius:6px; padding:4px 8px; background:var(--paper);
+  margin:0 3px;
+}
+.fill-text select.correct{border-color:var(--moss); background:var(--moss-soft);}
+.fill-text select.incorrect{border-color:var(--clay); background:var(--clay-soft);}
+
+.btn{
+  font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:.04em; text-transform:uppercase;
+  background:var(--ink); color:#fff; border:none; border-radius:8px; padding:12px 22px; cursor:pointer;
+  transition:background .15s; margin-top:16px;
+}
+.btn:hover{background:var(--ink-soft);}
+.feedback{margin-top:14px; font-size:14.5px; font-weight:600; display:none;}
+.feedback.show{display:block;}
+.feedback.good{color:var(--moss);}
+.feedback.bad{color:var(--clay);}
+
+/* ===== VIDEO ===== */
+.video-card{background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:20px; margin:20px 0;}
+.video-card .who{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--slate); letter-spacing:.06em; text-transform:uppercase; display:block; margin-bottom:.5em;}
+.video-frame{position:relative; padding-bottom:56.25%; height:0; border-radius:10px; overflow:hidden; margin-top:14px;}
+.video-frame iframe{position:absolute; top:0; left:0; width:100%; height:100%; border:none;}
+
+/* ===== PROCESO DIAGRAM ===== */
+.flow{
+  background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+  padding:24px; margin:20px 0; text-align:center;
+}
+.flow-row{display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap;}
+.flow-box{
+  font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:.02em;
+  background:var(--ink); color:#fff; padding:10px 16px; border-radius:8px;
+}
+.flow-box.soft{background:var(--slate);}
+.flow-arrow{color:var(--brass); font-size:18px;}
+.flow-meta{margin-top:14px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--text-soft); letter-spacing:.05em; text-transform:uppercase;}
+
+/* ===== CASE STUDY / PROBLEM-SOLUTION ===== */
+.case-box{background:#fff; border:1px solid var(--line); border-left:4px solid var(--slate); border-radius:0 var(--radius) var(--radius) 0; padding:22px 24px; margin:20px 0;}
+.ps-grid{display:grid; gap:14px; margin:20px 0;}
+.ps-row{
+  display:grid; grid-template-columns:1fr auto 1fr; gap:14px; align-items:center;
+  background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:18px 20px;
+}
+.ps-row .problem{border-left:3px solid var(--clay); padding-left:14px;}
+.ps-row .solution{border-left:3px solid var(--moss); padding-left:14px;}
+.ps-row h4{font-size:14.5px; margin-bottom:.3em;}
+.ps-row p{font-size:13.5px; color:var(--text-soft); margin:0;}
+.ps-arrow{color:var(--brass); font-size:20px;}
+
+/* ===== EVAL FINAL ===== */
+.eval-section{background:var(--ink); color:#EFEEE8; margin-top:0;}
+.eval-section .section{max-width:var(--maxw); padding-top:70px; padding-bottom:70px;}
+.eval-section h2{color:#fff;}
+.eval-section .eyebrow{color:var(--brass-soft);}
+.eval-section p.lead{color:#C9CFDC;}
+.eval-checklist{list-style:none; padding:0; margin:20px 0; display:grid; gap:8px;}
+.eval-checklist li{
+  display:flex; gap:10px; align-items:flex-start; font-size:14.5px; color:#DCE1EA;
+}
+.eval-checklist li::before{content:"✓"; color:var(--brass-soft); font-weight:700; flex-shrink:0;}
+.form-frame{margin-top:26px; background:#fff; border-radius:var(--radius); overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,.35);}
+.form-frame iframe{width:100%; min-height:900px; border:none; display:block;}
+
+footer{text-align:center; padding:30px 20px; color:var(--text-soft); font-size:13.5px; font-family:'IBM Plex Mono', monospace;}
+
+@media (max-width:900px){
+  .hero-inner{grid-template-columns:1fr; text-align:center;}
+  .compass{margin:0 auto;}
+  .layout{grid-template-columns:1fr;}
+  .rail{position:sticky; top:0; flex-direction:row; overflow-x:auto; gap:4px; background:var(--paper); border-bottom:1px solid var(--line); padding:12px 16px; z-index:10;}
+  .rail .mini-compass{display:none;}
+  .rail a{white-space:nowrap;}
+  .card-grid, .card-grid.cols-4, .style-grid{grid-template-columns:1fr;}
+  .match-row{grid-template-columns:1fr;}
+  .ps-row{grid-template-columns:1fr; text-align:left;}
+  .ps-arrow{transform:rotate(90deg); justify-self:center;}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  .compass .needle, .acc-a{transition:none;}
+}
+
+</style>
+</head>
+<body>
+
+<a class="back-home" href="https://capalink.github.io/Cursos-LinkSolution/">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+  Cursos
+</a>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <svg class="compass" viewBox="0 0 170 170" aria-hidden="true">
+      <circle class="dial" cx="85" cy="85" r="70"/>
+      <circle class="dial" cx="85" cy="85" r="55"/>
+      <text class="label" id="lbl-mod1" x="85" y="18" text-anchor="middle">CANALES</text>
+      <text class="label" id="lbl-mod2" x="146" y="50" text-anchor="start">BARRERAS</text>
+      <text class="label" id="lbl-mod3" x="146" y="122" text-anchor="start">ESTILOS</text>
+      <text class="label" id="lbl-mod4" x="85" y="155" text-anchor="middle">ESCUCHA</text>
+      <text class="label" id="lbl-mod5" x="24" y="122" text-anchor="end">ÁGIL</text>
+      <text class="label" id="lbl-eval" x="24" y="50" text-anchor="end">EVAL.</text>
+      <g class="needle" id="needle">
+        <polygon class="needle-fill" points="85,25 91,85 85,80 79,85"/>
+        <polygon points="85,145 91,85 85,90 79,85" fill="#5B6579"/>
+      </g>
+      <circle class="hub" cx="85" cy="85" r="6"/>
+    </svg>
+    <div>
+      <span class="eyebrow">Campus de capacitación · Curso interactivo</span>
+      <h1>Comunicación</h1>
+      <p class="lead">La comunicación es una herramienta fundamental en nuestra vida diaria. Nos permite relacionarnos con los demás, transmitir nuestras ideas, pensamientos y sentimientos de manera efectiva.</p>
+      <div class="hero-meta">
+        <span class="chip">5 bloques temáticos</span>
+        <span class="chip">Autoevaluaciones interactivas</span>
+        <span class="chip">Evaluación final</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <div class="railwrap">
+    <nav class="rail" id="rail">
+      <svg class="mini-compass" viewBox="0 0 170 170" aria-hidden="true">
+        <circle class="dial" cx="85" cy="85" r="70" stroke="#B9C2D2"/>
+        <g class="needle" id="needle-mini">
+          <polygon points="85,25 91,85 85,80 79,85" fill="var(--brass)"/>
+          <polygon points="85,145 91,85 85,90 79,85" fill="#B9C2D2"/>
+        </g>
+        <circle cx="85" cy="85" r="6" fill="var(--paper)" stroke="var(--brass)" stroke-width="2"/>
+      </svg>
+      <a href="#indice">Índice</a>
+      <a href="#mod1" data-nav="mod1">1. Canales</a>
+      <a href="#mod2" data-nav="mod2">2. Barreras</a>
+      <a href="#mod3" data-nav="mod3">3. Estilos</a>
+      <a href="#mod4" data-nav="mod4">4. Escucha activa</a>
+      <a href="#mod5" data-nav="mod5">5. Comunicación ágil</a>
+      <a href="#evalfinal" data-nav="eval">6. Autoevaluación</a>
+    </nav>
+  </div>
+
+  <div class="content">
+
+    <!-- INDICE -->
+    <section class="section" id="indice">
+      <span class="eyebrow">Recorrido del curso</span>
+      <h2>Índice</h2>
+      <ol>
+        <li>¿Cómo nos comunicamos?</li>
+        <li>Elementos que interfieren en la comunicación efectiva</li>
+        <li>Estilos de comunicación</li>
+        <li>Escucha activa</li>
+        <li>Prácticas de comunicación en desarrollo ágil</li>
+        <li>Autoevaluación</li>
+      </ol>
+    </section>
+
+    <!-- MOD 1 -->
+    <section class="section" id="mod1" data-compass="mod1">
+      <span class="eyebrow">1 · Fundamentos</span>
+      <h2>¿Cómo nos comunicamos?</h2>
+      <p>Nos comunicamos a través de diferentes canales:</p>
+      <div class="card-grid cols-4">
+        <div class="card"><span class="icon">🗣️</span><h4>Palabra hablada</h4><p>Con ella se transmiten emociones y sentimientos.</p></div>
+        <div class="card"><span class="icon">✍️</span><h4>Escritura</h4><p>Precisa y detallada.</p></div>
+        <div class="card"><span class="icon">🤲</span><h4>Lenguaje corporal</h4><p>Gestos, posturas, movimientos del cuerpo y el rostro.</p></div>
+        <div class="card"><span class="icon">👁️</span><h4>Señales visuales</h4><p>Hechos perceptibles por los sentidos.</p></div>
+      </div>
+
+      <h3>Proceso de comunicación</h3>
+      <p>Para que tenga lugar una comunicación eficaz, deben estar presentes seis componentes: un emisor, un mensaje, un canal, un receptor, retroalimentación y un entorno. Además, hay un séptimo componente, el ruido, que afecta todo el proceso.</p>
+
+      <div class="flow">
+        <div class="flow-row">
+          <span class="flow-box">Emisor</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-box soft">Mensaje</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-box soft">Canal</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-box">Receptor</span>
+        </div>
+        <div class="flow-row" style="margin-top:10px;">
+          <span class="flow-arrow" style="transform:scaleX(-1);">→</span>
+          <span class="flow-box" style="background:var(--brass);">Retroalimentación</span>
+        </div>
+        <div class="flow-meta">Entorno · Ruido</div>
+      </div>
+
+      <h3>La importancia del entorno y del ruido</h3>
+      <p>La cultura de la organización —sus actitudes y atmósfera— es un factor clave del entorno que influye en la comunicación. En este contexto, el ruido es cualquier cosa que interrumpe la comunicación, incluidas las actitudes y emociones del receptor: estrés, miedo, actitudes negativas y poca motivación.</p>
+      <p>Comprender el entorno y el ruido en un circuito de comunicación es esencial para identificar posibles obstáculos que interfieran con la transmisión y recepción de mensajes, ya sean físicos o intangibles.</p>
+
+      <h3>Actividad · Relacioná</h3>
+      <div class="activity" id="act-match">
+        <p class="prompt">Elegí, para cada canal, la definición que le corresponde.</p>
+        <div class="match-row" data-correct="Con ella se transmiten emociones y sentimientos.">
+          <span class="item">Palabra hablada</span>
+          <select>
+            <option value="">Elegí una definición…</option>
+            <option>Con ella se transmiten emociones y sentimientos.</option>
+            <option>Precisa y detallada.</option>
+            <option>Hechos perceptibles por los sentidos.</option>
+            <option>Gestos, posturas, movimientos del cuerpo y el rostro.</option>
+          </select>
+        </div>
+        <div class="match-row" data-correct="Precisa y detallada.">
+          <span class="item">Escritura</span>
+          <select>
+            <option value="">Elegí una definición…</option>
+            <option>Con ella se transmiten emociones y sentimientos.</option>
+            <option>Precisa y detallada.</option>
+            <option>Hechos perceptibles por los sentidos.</option>
+            <option>Gestos, posturas, movimientos del cuerpo y el rostro.</option>
+          </select>
+        </div>
+        <div class="match-row" data-correct="Hechos perceptibles por los sentidos.">
+          <span class="item">Señales visuales</span>
+          <select>
+            <option value="">Elegí una definición…</option>
+            <option>Con ella se transmiten emociones y sentimientos.</option>
+            <option>Precisa y detallada.</option>
+            <option>Hechos perceptibles por los sentidos.</option>
+            <option>Gestos, posturas, movimientos del cuerpo y el rostro.</option>
+          </select>
+        </div>
+        <div class="match-row" data-correct="Gestos, posturas, movimientos del cuerpo y el rostro.">
+          <span class="item">Lenguaje corporal</span>
+          <select>
+            <option value="">Elegí una definición…</option>
+            <option>Con ella se transmiten emociones y sentimientos.</option>
+            <option>Precisa y detallada.</option>
+            <option>Hechos perceptibles por los sentidos.</option>
+            <option>Gestos, posturas, movimientos del cuerpo y el rostro.</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-check-match">Corregir</button>
+        <p class="feedback"></p>
+      </div>
+    </section>
+
+    <!-- MOD 2 -->
+    <section class="section" id="mod2" data-compass="mod2">
+      <span class="eyebrow">2 · Obstáculos</span>
+      <h2>Elementos que interfieren en la comunicación efectiva</h2>
+      <p>Tocá cada elemento para conocerlo en detalle:</p>
+      <div class="acc-list">
+        <div class="acc-item"><button class="acc-q"><span class="n">1</span>Barreras lingüísticas<span class="chev">+</span></button><div class="acc-a"><p>Diferencias en el idioma, vocabulario o jerga que dificultan la comprensión mutua.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">2</span>Barreras culturales<span class="chev">+</span></button><div class="acc-a"><p>Diferencias culturales en normas de comportamiento, expresión facial y estilo de comunicación.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">3</span>Ruido físico<span class="chev">+</span></button><div class="acc-a"><p>Factores ambientales como ruidos externos, distracciones visuales o problemas técnicos.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">4</span>Barreras psicológicas<span class="chev">+</span></button><div class="acc-a"><p>Prejuicios, estereotipos, emociones intensas y sesgos cognitivos que afectan la interpretación.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">5</span>Falta de atención<span class="chev">+</span></button><div class="acc-a"><p>Multitarea, distracción o falta de concentración que impide la escucha efectiva.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">6</span>Percepciones erróneas<span class="chev">+</span></button><div class="acc-a"><p>Malentendidos, suposiciones incorrectas o interpretaciones equivocadas de los mensajes.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">7</span>Falta de claridad<span class="chev">+</span></button><div class="acc-a"><p>Mensajes ambiguos, mal estructurados o poco claros que dificultan la comprensión.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">8</span>Falta de habilidades<span class="chev">+</span></button><div class="acc-a"><p>Carencia de habilidades para expresarse claramente, escuchar activamente o manejar conflictos.</p></div></div>
+      </div>
+    </section>
+
+    <!-- MOD 3 -->
+    <section class="section" id="mod3" data-compass="mod3">
+      <span class="eyebrow">3 · Formas de comunicar</span>
+      <h2>Estilos de comunicación</h2>
+      <div class="style-grid">
+        <div class="style-card">
+          <span class="tag">Estilo pasivo</span>
+          <h4>Evita mostrar sus sentimientos</h4>
+          <p>Propio de personas que evitan mostrar sus sentimientos o pensamientos por temor a ser rechazadas o incomprendidas. Infravaloran sus propias opiniones y necesidades, dando un valor superior a las de los demás.</p>
+        </div>
+        <div class="style-card">
+          <span class="tag">Estilo agresivo</span>
+          <h4>Sobrevalora lo propio</h4>
+          <p>Sobrevaloración de las opiniones y sentimientos personales, obviando o incluso despreciando los de los demás.</p>
+        </div>
+        <div class="style-card">
+          <span class="tag">Estilo asertivo</span>
+          <h4>Respeto mutuo</h4>
+          <p>Abierto a las opiniones ajenas, dándoles la misma importancia que a las propias. Respeta a los demás aceptando que su postura no tiene por qué coincidir con la del resto, expresándose de forma directa, honesta y abierta.</p>
+        </div>
+      </div>
+
+      <h3>Comunicación efectiva</h3>
+      <p>En la comunicación efectiva, el mensaje transmitido debe ser claro, relevante y adaptado al contexto y al público objetivo. Se debe asegurar que el receptor comprenda el mensaje de la misma manera que el emisor lo pretendía, evitando malentendidos o interpretaciones erróneas.</p>
+      <p>No se trata solo de transmitir información verbalmente, sino también de escuchar activamente y comprender las necesidades, preocupaciones o puntos de vista de los demás, prestando atención a las señales no verbales y mostrando empatía y respeto hacia el interlocutor.</p>
+
+      <h3>Pasos para comunicarse efectivamente</h3>
+      <div class="acc-list">
+        <div class="acc-item"><button class="acc-q"><span class="n">1</span>Establecer un propósito claro<span class="chev">+</span></button><div class="acc-a"><p>¿Qué querés lograr con esta comunicación? Tener un propósito definido ayuda a estructurar el mensaje.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">2</span>Conocer a tu audiencia<span class="chev">+</span></button><div class="acc-a"><p>Considerá quiénes son tus receptores y adaptá el mensaje a su nivel de comprensión, intereses y necesidades.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">3</span>Utilizar un lenguaje claro y conciso<span class="chev">+</span></button><div class="acc-a"><p>Empleá un lenguaje sencillo y directo. Evitá jergas o tecnicismos confusos y sé conciso.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">4</span>Escuchar activamente<span class="chev">+</span></button><div class="acc-a"><p>La comunicación efectiva no es solo hablar: prestá atención, mostrá interés genuino y hacé preguntas.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">5</span>Mostrar empatía<span class="chev">+</span></button><div class="acc-a"><p>Tratá de entender los sentimientos y perspectivas de tu interlocutor, siendo receptivo a sus emociones.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">6</span>Ser asertivo<span class="chev">+</span></button><div class="acc-a"><p>Expresá tus ideas y opiniones de manera clara, directa y respetuosa, receptivo a las opiniones de otros.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">7</span>Utilizar medios adecuados<span class="chev">+</span></button><div class="acc-a"><p>Ya sea cara a cara, por teléfono, correo o mensajería, seleccioná el medio que mejor facilite la comprensión.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">8</span>Dar retroalimentación constructiva<span class="chev">+</span></button><div class="acc-a"><p>Si estás recibiendo o dando retroalimentación, asegurate de que sea constructiva, específica y orientada a la mejora.</p></div></div>
+        <div class="acc-item"><button class="acc-q"><span class="n">9</span>Seguir el proceso de retroalimentación<span class="chev">+</span></button><div class="acc-a"><p>Asegurate de seguirlo hasta su conclusión, discutiendo el tema hasta llegar a una solución mutuamente satisfactoria.</p></div></div>
+      </div>
+
+      <h3>Actividad · Completá la frase</h3>
+      <div class="activity" id="act-fill">
+        <p class="prompt">Elegí, en cada espacio, la palabra o frase correcta.</p>
+        <p class="fill-text">
+          En la comunicación efectiva, el <select data-correct="mensaje"><option value="">…</option></select> transmitido debe ser claro, relevante y adaptado al <select data-correct="contexto"><option value="">…</option></select> y al <select data-correct="público"><option value="">…</option></select> objetivo. Además, se debe asegurar que el <select data-correct="receptor"><option value="">…</option></select> comprenda el mensaje de la misma manera que el <select data-correct="emisor"><option value="">…</option></select> lo pretendía, evitando malentendidos o interpretaciones erróneas. La comunicación efectiva no solo se trata de <select data-correct="transmitir información"><option value="">…</option></select> verbalmente, sino también de <select data-correct="escuchar activamente"><option value="">…</option></select> y comprender las necesidades, preocupaciones o puntos de vista de los demás.
+        </p>
+        <button type="button" class="btn btn-check-fill">Comprobar</button>
+        <p class="feedback"></p>
+      </div>
+
+      <h3>Video resumen</h3>
+      <p>En este video vas a ver cómo se resuelven conflictos mejorando el estilo de comunicación (comunicación asertiva), lo que mejora cualquier intercambio con compañeros de equipo.</p>
+      <div class="video-card">
+        <span class="who">BBVA Aprendemos Juntos</span>
+        <strong>Cómo comunicarnos con asertividad — Estrella Montolío</strong>
+        <div class="video-frame">
+          <iframe src="https://www.youtube.com/embed/jvxuQEe_0-w" title="Cómo comunicarnos con asertividad — Estrella Montolío" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOD 4 -->
+    <section class="section" id="mod4" data-compass="mod4">
+      <span class="eyebrow">4 · Saber escuchar</span>
+      <h2>Escucha activa</h2>
+      <p>La escucha activa es un proceso en el que se presta una atención completa y concentrada a lo que una persona está comunicando, tanto verbal como no verbalmente. Implica más que simplemente oír las palabras: requiere comprender el mensaje, las emociones y las intenciones detrás de ellas.</p>
+
+      <h3>¿Cómo lograr una escucha activa?</h3>
+      <div class="card-grid">
+        <div class="card"><h4>Atención total</h4><p>Centrar toda la atención en quien habla, evitando distracciones y mostrando interés genuino.</p></div>
+        <div class="card"><h4>Escucha comprensiva</h4><p>Entender el mensaje desde la perspectiva del hablante, considerando sus sentimientos y puntos de vista.</p></div>
+        <div class="card"><h4>Responder adecuadamente</h4><p>Demostrar comprensión a través de gestos de afirmación, preguntas clarificadoras y respuestas pertinentes.</p></div>
+        <div class="card"><h4>Reflejar y validar emociones</h4><p>Reconocer y validar las emociones expresadas, mostrando empatía y comprensión.</p></div>
+      </div>
+      <div class="card-grid" style="grid-template-columns:1fr;">
+        <div class="card"><h4>Evitar interrupciones</h4><p>Permitir que el hablante termine de expresar sus ideas antes de responder.</p></div>
+      </div>
+
+      <h3>Tips para escuchar mejor</h3>
+      <div class="card-grid">
+        <div class="card"><span class="icon">📵</span><h4>Eliminá distracciones</h4><p>Encontrá un entorno tranquilo y libre de distracciones para concentrarte en quien habla.</p></div>
+        <div class="card"><span class="icon">👀</span><h4>Mantené contacto visual</h4><p>Demostrá interés y ayudá a mantener la atención, evitando mirar alrededor o el teléfono.</p></div>
+        <div class="card"><span class="icon">💬</span><h4>No planifiques tu respuesta</h4><p>En vez de pensar qué vas a decir, centrate en escuchar realmente lo que se está diciendo.</p></div>
+        <div class="card"><span class="icon">🫁</span><h4>Practicá la respiración consciente</h4><p>Si tu mente divaga, tomá respiraciones profundas para volver al momento presente.</p></div>
+      </div>
+    </section>
+
+    <!-- MOD 5 -->
+    <section class="section" id="mod5" data-compass="mod5">
+      <span class="eyebrow">5 · Comunicación en equipos</span>
+      <h2>Prácticas de comunicación en desarrollo ágil</h2>
+      <p>En el marco del desarrollo ágil, las prácticas de comunicación son fundamentales para garantizar la colaboración efectiva entre los miembros del equipo y el éxito del proyecto en general. Algunas ideas:</p>
+
+      <div class="card-grid">
+        <div class="card"><span class="num">01</span><h4>Reuniones diarias</h4><p>Breves reuniones donde el equipo comparte rápidamente qué hizo ayer, qué planea hoy y qué impedimentos enfrenta.</p></div>
+        <div class="card"><span class="num">02</span><h4>Planificación de sprint</h4><p>Se discuten los objetivos del sprint, se desglosan historias de usuario en tareas y se asignan responsabilidades.</p></div>
+        <div class="card"><span class="num">03</span><h4>Revisión de sprint</h4><p>Al final de cada sprint, el equipo demuestra el trabajo completado al cliente y recopila feedback.</p></div>
+        <div class="card"><span class="num">04</span><h4>Retrospectiva de sprint</h4><p>El equipo reflexiona sobre qué salió bien, qué no, y cómo mejorar en el futuro.</p></div>
+        <div class="card"><span class="num">05</span><h4>Tableros Kanban o Scrum</h4><p>Tableros físicos o digitales que visualizan el flujo de trabajo y facilitan la comunicación sobre el estado de las tareas.</p></div>
+        <div class="card"><span class="num">06</span><h4>Herramientas colaborativas</h4><p>Slack, Microsoft Teams, Discord o similares, para comunicación instantánea y colaboración en tiempo real.</p></div>
+        <div class="card"><span class="num">07</span><h4>Comunicación transparente y abierta</h4><p>Fomentar una cultura donde se aliente a compartir ideas, preocupaciones y puntos de vista de forma constructiva.</p></div>
+      </div>
+
+      <h3>Ejemplo de caso práctico</h3>
+      <div class="case-box">
+        <p>Una empresa de desarrollo de software está trabajando en un proyecto importante para un cliente. El equipo está distribuido en diferentes ubicaciones geográficas y se comunica principalmente a través de reuniones virtuales y herramientas de colaboración en línea.</p>
+      </div>
+
+      <div class="ps-grid">
+        <div class="ps-row">
+          <div class="problem"><h4>Falta de claridad en los requisitos</h4><p>El equipo de desarrollo no tiene una comprensión clara de los requisitos del cliente por una comunicación deficiente entre ventas y desarrollo.</p></div>
+          <span class="ps-arrow">→</span>
+          <div class="solution"><h4>Solución</h4><p>Establecer reuniones regulares entre ventas y desarrollo para garantizar una comprensión clara de los requisitos.</p></div>
+        </div>
+        <div class="ps-row">
+          <div class="problem"><h4>Dificultades en la coordinación del equipo distribuido</h4><p>El equipo enfrenta dificultades para coordinar actividades y compartir información oportunamente, causando retrasos.</p></div>
+          <span class="ps-arrow">→</span>
+          <div class="solution"><h4>Solución</h4><p>Implementar herramientas de gestión de proyectos y colaboración en línea para mejorar la coordinación.</p></div>
+        </div>
+        <div class="ps-row">
+          <div class="problem"><h4>Falta de retroalimentación del cliente</h4><p>El cliente no proporciona retroalimentación oportuna sobre las entregas parciales del proyecto.</p></div>
+          <span class="ps-arrow">→</span>
+          <div class="solution"><h4>Solución</h4><p>Establecer canales de comunicación claros con el cliente y solicitar retroalimentación regular.</p></div>
+        </div>
+        <div class="ps-row">
+          <div class="problem"><h4>Malentendidos en las especificaciones técnicas</h4><p>Por una comunicación deficiente entre desarrolladores y diseñadores, se implementan características incorrectas.</p></div>
+          <span class="ps-arrow">→</span>
+          <div class="solution"><h4>Solución</h4><p>Mejorar la documentación y la comunicación de las especificaciones técnicas entre equipos.</p></div>
+        </div>
+      </div>
+
+      <p>Por último, fomentar una cultura de comunicación abierta y transparente en la empresa, donde se aliente a los empleados a compartir sus preocupaciones y desafíos de manera constructiva.</p>
+    </section>
+
+  </div>
+</div>
+
+<!-- EVALUACION FINAL -->
+<section class="eval-section" id="evalfinal" data-compass="eval">
+  <div class="section">
+    <span class="eyebrow">6 · Para cerrar el curso</span>
+    <h2>Autoevaluación</h2>
+    <p class="lead">Ya recorriste los cinco bloques del curso y completaste las autoevaluaciones de canales de comunicación y comunicación efectiva. Para finalizar, completá el siguiente formulario:</p>
+    <ul class="eval-checklist">
+      <li>¿Cómo nos comunicamos? — canales y proceso de comunicación</li>
+      <li>Elementos que interfieren en la comunicación efectiva</li>
+      <li>Estilos de comunicación y comunicación asertiva</li>
+      <li>Escucha activa</li>
+      <li>Prácticas de comunicación en desarrollo ágil</li>
+    </ul>
+    <div class="form-frame">
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSepTMx-7CIfxTLzxJobWDwNL8yk3HJaiEzVMvz9xz5Zmqt4yg/viewform?embedded=true" title="Comunicación - Evaluación Final">Cargando…</iframe>
+    </div>
+  </div>
+</section>
+
+<footer>CAMPUS DE CAPACITACIÓN INTERNA — COMUNICACIÓN</footer>
+
+<script>
+// ---- Accordions ----
+document.querySelectorAll('.acc-q').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    btn.closest('.acc-item').classList.toggle('open');
+  });
+});
+
+// ---- Match activity ----
+document.querySelector('.btn-check-match').addEventListener('click', ()=>{
+  const rows = document.querySelectorAll('#act-match .match-row');
+  let hits = 0;
+  rows.forEach(row=>{
+    const sel = row.querySelector('select');
+    const correct = row.dataset.correct;
+    row.classList.remove('correct','incorrect');
+    if(sel.value === correct){ row.classList.add('correct'); hits++; }
+    else if(sel.value !== ''){ row.classList.add('incorrect'); }
+  });
+  const fb = document.querySelector('#act-match .feedback');
+  fb.classList.remove('good','bad');
+  if(hits === rows.length){ fb.textContent = '¡Perfecto! Relacionaste todos los canales correctamente.'; fb.classList.add('good'); }
+  else { fb.textContent = `Acertaste ${hits} de ${rows.length}. Revisá los campos resaltados e intentá de nuevo.`; fb.classList.add('bad'); }
+  fb.classList.add('show');
+});
+
+// ---- Fill in the blank ----
+const wordBank = ['contexto','emisor','escuchar activamente','mensaje','público','receptor','transmitir información'];
+document.querySelectorAll('#act-fill select').forEach(sel=>{
+  wordBank.forEach(w=>{
+    const opt = document.createElement('option');
+    opt.value = w; opt.textContent = w;
+    sel.appendChild(opt);
+  });
+});
+document.querySelector('.btn-check-fill').addEventListener('click', ()=>{
+  const selects = document.querySelectorAll('#act-fill select');
+  let hits = 0;
+  selects.forEach(sel=>{
+    sel.classList.remove('correct','incorrect');
+    if(sel.value === sel.dataset.correct){ sel.classList.add('correct'); hits++; }
+    else if(sel.value !== ''){ sel.classList.add('incorrect'); }
+  });
+  const fb = document.querySelector('#act-fill .feedback');
+  fb.classList.remove('good','bad');
+  if(hits === selects.length){ fb.textContent = '¡Excelente! Completaste la frase correctamente.'; fb.classList.add('good'); }
+  else { fb.textContent = `Completaste ${hits} de ${selects.length} espacios correctamente.`; fb.classList.add('bad'); }
+  fb.classList.add('show');
+});
+
+// ---- Compass + active nav ----
+const angles = {mod1:0, mod2:60, mod3:120, mod4:180, mod5:240, eval:300};
+const needle = document.getElementById('needle');
+const needleMini = document.getElementById('needle-mini');
+const labelIds = {mod1:'lbl-mod1', mod2:'lbl-mod2', mod3:'lbl-mod3', mod4:'lbl-mod4', mod5:'lbl-mod5', eval:'lbl-eval'};
+const navLinks = document.querySelectorAll('.rail a[data-nav]');
+
+function setActive(key){
+  const angle = angles[key] ?? 0;
+  needle.style.transform = `rotate(${angle}deg)`;
+  needleMini.style.transform = `rotate(${angle}deg)`;
+  Object.values(labelIds).forEach(id=>document.getElementById(id).classList.remove('active'));
+  if(labelIds[key]) document.getElementById(labelIds[key]).classList.add('active');
+  navLinks.forEach(a=>a.classList.toggle('active', a.dataset.nav === key));
+}
+
+const targets = document.querySelectorAll('[data-compass]');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{ if(entry.isIntersecting){ setActive(entry.target.dataset.compass); } });
+}, {rootMargin:'-40% 0px -50% 0px', threshold:0});
+targets.forEach(t=>io.observe(t));
+</script>
+
+</body>
+</html>
